@@ -65,6 +65,7 @@ type t_brick_kind = BK_empty | BK_simple | BK_double | BK_block | BK_bonus;;
   @return Renvoie le type correspondant à la notion de vide.
   @deprecated  Cette fonction est utilisé en interne.    
 *)
+
 let make_empty_brick() : t_brick_kind = 
   BK_empty
 ;;
@@ -78,13 +79,12 @@ let make_empty_brick() : t_brick_kind =
 type t_ball_size = BS_SMALL | BS_MEDIUM | BS_BIG;;
 
 (** 
-Enumeration des différentes taille de la raquette. Par défaut, une raquette doit avoir la taille
-[PS_SMALL]. 
+  Enumeration des différentes taille de la raquette. Par défaut, une raquette doit avoir la taille
+  [PS_SMALL]. 
 
   Vous pouvez ajouter d'autres valeurs sans modifier les valeurs existantes.
 *)
 type t_paddle_size = PS_SMALL | PS_MEDIUM | PS_BIG;;
-
 
 
 (** 
@@ -101,7 +101,17 @@ type t_paddle_size = PS_SMALL | PS_MEDIUM | PS_BIG;;
 type t_gamestate = GAMEOVER | PLAYING | PAUSING;;
 
 
+(** 
+  Cette fonction permet de créer un vecteur 2D à partir de deux entiers.
+  Les entiers représentent la composante en X et en Y du vecteur.
 
+  Vous devez modifier cette fonction.
+  @param x première composante du vecteur
+  @param y seconde composante du vecteur
+  @return Renvoie le vecteur dont les composantes sont (x,y).
+  @deprecated Cette fonction est utilisée en interne.
+  @autor ZAGINEI Mykyta
+  *)
 (* Itération 1 *)
 type t_vec2 = {dx : int ; dy : int};;
 
@@ -114,6 +124,7 @@ type t_vec2 = {dx : int ; dy : int};;
   @param x première composante du vecteur
   @param y seconde composante du vecteur
   @return Renvoie le vecteur dont les composantes sont (x,y).
+  @author Zaginei Mykyta
 *)
 let make_vec2(x,y : int * int) : t_vec2 = 
   {dx = x ; dy = y}
@@ -124,6 +135,7 @@ let make_vec2(x,y : int * int) : t_vec2 =
   @param a premier vecteur
   @param b second vecteur
   @return Renvoie un vecteur égale à la somme des vecteurs.
+  @author Zaginei Mykyta
 *)
 let vec2_add(a,b : t_vec2 * t_vec2) : t_vec2 =
   {dx = a.dx + b.dx; dy = a.dy + b.dy}
@@ -134,17 +146,11 @@ let vec2_add(a,b : t_vec2 * t_vec2) : t_vec2 =
   Cette fonction renvoie un vecteur égale à la somme d'un vecteur
   donné en argument et un autre vecteur construit à partir de (x,y).
   
-  Cette fonction est une optimisation du code suivant (que vous ne devez pas faire en l'état):
-  {[
-let vec2_add_scalar(a,x,y : t_vec2 * int * int) : t_vec2 =
-  vec2_add(a, make_vec2(x,y))
-;;
-  ]}
-
   @param a premier vecteur
   @param x composante en x du second vecteur
   @param y composante en y du second vecteur
   @return Renvoie un vecteur qui est la résultante du vecteur 
+  @author Zaginei Mykyta
 *)
 let vec2_add_scalar(a,x,y : t_vec2 * int * int) : t_vec2 =
    {dx = a.dx + x; dy = a.dy + y}
@@ -162,6 +168,7 @@ let vec2_add_scalar(a,x,y : t_vec2 * int * int) : t_vec2 =
   @param a premier vecteur
   @param b second vecteur
   @return Renvoie un vecteur qui résulte de la multiplication des composantes. 
+  @author Zaginei Mykyta
 *)
 let vec2_mult(a,b : t_vec2 * t_vec2) : t_vec2 = 
   {dx = a.dx * b.dx; dy = a.dy * b.dy}
@@ -175,8 +182,9 @@ let vec2_mult_scalar(a,x,y : t_vec2 * int * int) : t_vec2 =
   vec2_mult(a, make_vec2(x,y))
 ;;
   ]}
-    
+    @author Zaginei Mykyta
 *)
+
 let vec2_mult_scalar(a,x,y : t_vec2 * int * int) : t_vec2 =
   {dx = a.dx * x; dy = a.dy * y}
 ;;
@@ -189,9 +197,22 @@ type t_ball = unit;;
 (* Itération 2 *)
 type t_paddle = unit;;
 
-
+(**
+  Cette structure représente l'état du jeu de casse-brique. 
+  Elle contient l'ensemble des informations nécessaires pour représenter le jeu.
+  Vous devez modifier cette structure pour ajouter les informations nécessaires pour représenter le jeu.
+  @deprecated Cette structure est utilisée en interne.
+  @autor Hau NGUYEN    
+*)
 (* Itération 1, 2, 3 et 4 *)
-type t_camlbrick = unit
+type t_camlbrick = {
+  param : t_camlbrick_param;
+  ball : t_ball;
+  paddle : t_paddle;
+  bricks : t_brick_kind array array;
+  score : int;
+  state : t_gamestate;
+}
 ;;
 
 
@@ -226,16 +247,29 @@ let param_get(game : t_camlbrick) : t_camlbrick_param =
   make_camlbrick_param()
 ;;
 
-(**
-  Cette fonction crée une nouvelle structure qui initialise le monde avec aucune brique visible.
-  Une raquette par défaut et une balle par défaut dans la zone libre.
-  @return Renvoie un jeu correctement initialisé
+(** [make_camlbrick ()] est une fonction qui crée une nouvelle instance de l'état du jeu pour CamlBrick.
+    Elle initialise les paramètres du jeu, la balle, la raquette, les briques, le score et l'état.
+
+    @return A new instance of the game state for CamlBrick.
+    @autor Hau NGUYEN
 *)
 let make_camlbrick() : t_camlbrick = 
-  (* Itération 1, 2, 3 et 4 *)
-  ()
+  {
+    param = make_camlbrick_param ();
+    ball = {
+      position = {dx = 0; dy = 0};
+      velocity = {dx = 0; dy = 0};
+      size = BS_MEDIUM;
+    };
+    paddle = {
+      position = {dx = 0; dy = 0};
+      size = PS_SMALL;
+    };
+    bricks = [|[||]|];
+    score = 0;
+    state = GAMEOVER;
+  }  
 ;;
-
 
 (**
   Cette fonction crée une raquette par défaut au milieu de l'écran et de taille normal.  
@@ -262,27 +296,85 @@ let make_ball(x,y, size : int * int * int) : t_ball =
 
   @param game représente le jeu en cours d'exécution.
   @return Renvoie la chaîne de caractère représentant l'état du jeu.
+  @author Hau NGUYEN
 *)
+
 let string_of_gamestate(game : t_camlbrick) : string =
   (* Itération 1,2,3 et 4 *)
-  "INCONNU"
+  if game.state = GAMEOVER 
+  then "GAMEOVER"
+  else if game.state = PLAYING 
+       then "PLAYING"
+       else "PAUSING"
 ;;
 
-let brick_get(game, i, j : t_camlbrick * int * int)  : t_brick_kind =
+(** [brick_get game i j] is a function that returns the type of brick at position (i, j) in the game.
+    - [game] is the game state of type [t_camlbrick].
+    - [i] is the row index of the brick.
+    - [j] is the column index of the brick.
+    @return the type of brick at position (i, j) of type [t_brick_kind]. 
+    @autor ZAGINEI Mykyta    
+*)
+let brick_get (game, i, j : t_camlbrick * int * int) : t_brick_kind =
   (* Itération 1 *)
-  if i = 1 && j = 1
-  then BK_empty
-  else BK_simple 
+  if y < 0 
+    then BK_empty
+    else 
+      if y < param.world_empty_height
+      then BK_empty
+      else
+      let row : int = (y - param.world_empty_height) / param.brick_height in
+      if row mod 5 = 0 || row mod 5 = 1 
+      then BK_simple
+      else 
+        if row mod 5 = 2 || row mod 5 = 3
+        then BK_double
+        else BK_block
 ;;
 
+(** 
+  Brick_hit qui réalise les modifications dans la zone de brique pour faire évoluer une brique comme si elle était
+  touchée par une balle.   
+  @param game le jeu en cours
+  @param i la ligne de la brique
+  @param j la colonne de la brique
+  @return Renvoie le type de brique après le choc.
+  @autor Totskyi Hlib
+*)
 let brick_hit(game, i, j : t_camlbrick * int * int)  : t_brick_kind = 
   (* Itération 1 *)
-  BK_empty
+  if game.bricks.(i).(j) = BK_empty then
+    BK_empty
+  else if game.bricks.(i).(j) = BK_simple then
+    BK_empty
+  else if game.bricks.(i).(j) = BK_double then
+    BK_simple
+  else if game.bricks.(i).(j) = BK_block then
+    BK_block
+  else
+    BK_empty
 ;;
 
+(**
+  Cette fonction permet de calculer la couleur d'une brique à partir de son type.
+  @param game le jeu en cours
+  @param i la ligne de la brique
+  @param j la colonne de la brique
+  @return Renvoie la couleur de la brique.
+  @autor Totskyi Hlib   
+*)
 let brick_color(game,i,j : t_camlbrick * int * int) : t_camlbrick_color = 
   (* Itération 1 *)
-  ORANGE
+  if game.bricks.(i).(j) = BK_empty then
+    WHITE
+  else if game.bricks.(i).(j) = BK_simple then
+    BLUE
+  else if game.bricks.(i).(j) = BK_double then
+    YELLOW
+  else if game.bricks.(i).(j) = BK_block then
+    GREEN
+  else
+    BLACK
 ;;
 
 
