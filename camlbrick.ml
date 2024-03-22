@@ -288,19 +288,33 @@ let make_camlbrick() : t_camlbrick =
 (**
   Cette fonction crée une raquette par défaut au milieu de l'écran et de taille normal.  
   @deprecated Cette fonction est là juste pour le debug ou pour débuter certains traitements de test.
+  @author HAU NGUYEN
 *)
 let make_paddle() : t_paddle =
   (* Itération 2 *)
- ()
+  {
+    position = {dx = 0; dy = 0};
+    size = PS_MEDIUM;
+    width = 100;
+    height = 20;
+  }
 ;;
 
+(** @autor Hau NGUYEN *)
 let make_ball(x,y, size : int * int * int) : t_ball =
   (* Itération 3 *)
-  ()
+  let ball_size =
+    if size = 1 then BS_SMALL
+    else if size = 2 then BS_MEDIUM
+    else if size = 3 then BS_BIG
+    else BS_MEDIUM (* Par défaut, taille moyenne *)
+  in
+  {
+    position = {dx = x; dy = y};
+    velocity = {dx = 0; dy = 0};
+    size = ball_size;
+  }
 ;;
-
-
-
 
 (**
   Fonction utilitaire qui permet de traduire l'état du jeu sous la forme d'une chaîne de caractère.
@@ -392,15 +406,20 @@ let brick_color(game,i,j : t_camlbrick * int * int) : t_camlbrick_color =
 ;;
 
 
-
+(** @autor Hau NGUYEN *)
 let paddle_x(game : t_camlbrick) : int= 
   (* Itération 2 *)
-  0
+  game.paddle.position.dx
 ;;
 
+(** @autor Hau NGUYEN *)
 let paddle_size_pixel(game : t_camlbrick) : int = 
   (* Itération 2 *)
-  0
+  if game.paddle.size = PS_SMALL 
+    then 60
+    else if game.paddle.size = PS_MEDIUM 
+         then 80
+         else 100 (* PS_BIG *)
 ;;
 
 let paddle_move_left(game : t_camlbrick) : unit = 
