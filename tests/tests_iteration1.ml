@@ -3,6 +3,7 @@
 #load "CPtestfonc.cma";;
 open CPtestfonc;;
 
+(* Initialisation du rapport de test. *)
 test_reset_report();;
 
 type t_vec2 = {dx : int ; dy : int};;
@@ -15,8 +16,10 @@ let test_make_vec2 () : unit =
   let res : t_vec2 = test_exec(make_vec2, "test avec coordonés 3, 5" ,(3,5)) in
   assert (res = (3,5));;
 
+(* Appels des fonctions de test *)
+
 
   
-
+(* Affiche le rapport de test *)
   test_report();;  
 
