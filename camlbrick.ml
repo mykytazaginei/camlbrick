@@ -191,11 +191,24 @@ let vec2_mult_scalar(a,x,y : t_vec2 * int * int) : t_vec2 =
 
 
 
-(* Itération 2 *)
-type t_ball = unit;;
+(** Itération 2 
+  @author Hau NGUYEN *)
+type t_ball = {
+  position : t_vec2;
+  velocity : t_vec2;
+  size : t_ball_size;
+}
+;;
 
-(* Itération 2 *)
-type t_paddle = unit;;
+(** Itération 2 
+   @autor Hau NGUYEN *)
+type t_paddle = {
+  position : t_vec2;
+  size : t_paddle_size;
+  width : int;
+  height : int;
+}
+;;
 
 (**
   Cette structure représente l'état du jeu de casse-brique. 
@@ -206,7 +219,7 @@ type t_paddle = unit;;
 *)
 (* Itération 1, 2, 3 et 4 *)
 type t_camlbrick = {
-  param : t_camlbrick_param;
+  params : t_camlbrick_param;
   ball : t_ball;
   paddle : t_paddle;
   bricks : t_brick_kind array array;
@@ -241,10 +254,11 @@ let make_camlbrick_param() : t_camlbrick_param = {
   Cette fonction extrait le paramétrage d'un jeu à partir du jeu donné en argument.
   @param game jeu en cours d'exécution.
   @return Renvoie le paramétrage actuel.
+  @autor Hau NGUYEN
   *)
 let param_get(game : t_camlbrick) : t_camlbrick_param =
   (* Itération 1 *)
-  make_camlbrick_param()
+  game.params
 ;;
 
 (** [make_camlbrick ()] est une fonction qui crée une nouvelle instance de l'état du jeu pour CamlBrick.
