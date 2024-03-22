@@ -483,9 +483,14 @@ let ball_size_pixel(game, ball : t_camlbrick * t_ball) : int =
             else failwith  "Invalid size of the ball"    
 ;;
 
+(**@autor Hau NGUYEN*)
 let ball_color(game, ball : t_camlbrick * t_ball) : t_camlbrick_color =
   (* Itération 2 *)
-  GRAY
+  if ball.size = BS_SMALL
+  then YELLOW
+  else if ball.size = BS_MEDIUM
+       then ORANGE
+       else RED  
 ;;
 
 let ball_modif_speed(game, ball, dv : t_camlbrick * t_ball * t_vec2) : unit =
