@@ -269,15 +269,17 @@ let param_get(game : t_camlbrick) : t_camlbrick_param =
 *)
 let make_camlbrick() : t_camlbrick = 
   {
-    param = make_camlbrick_param ();
+    params = make_camlbrick_param ();
     ball = {
-      position = {dx = 0; dy = 0};
-      velocity = {dx = 0; dy = 0};
+      position = make_vec2(0, 0);
+      velocity = make_vec2(0, 0);
       size = BS_MEDIUM;
     };
     paddle = {
-      position = {dx = 0; dy = 0};
+      position = make_vec2(0, 0);
       size = PS_SMALL;
+      width = 0;
+      height = 0;
     };
     bricks = [|[||]|];
     score = 0;
@@ -424,7 +426,7 @@ let paddle_size_pixel(game : t_camlbrick) : int =
 
 let paddle_move_left(game : t_camlbrick) : unit = 
   (* Itération 2 *)
-  ()
+  
 ;;
 
 let paddle_move_right(game : t_camlbrick) : unit = 
@@ -432,19 +434,24 @@ let paddle_move_right(game : t_camlbrick) : unit =
   ()
  ;;
 
+ (**@autor HauNGUYEN*)
 let has_ball(game : t_camlbrick) : bool =
   (* Itération 2 *)
-  false
+  game.ball.position <> make_vec2(0, 0)
 ;;
 
+(**@autor HauNGUYEN*)
 let balls_count(game : t_camlbrick) : int =
   (* Itération 2 *)
-  0
+  if has_ball(game)
+  then 1
+  else 0
 ;;
 
+(**@autor HauNGUYEN*)
 let balls_get(game : t_camlbrick) : t_ball list = 
   (* Itération 2 *)
-  []
+  [game.ball]
 ;;
 
 let ball_get(game, i : t_camlbrick * int) : t_ball =
@@ -452,19 +459,28 @@ let ball_get(game, i : t_camlbrick * int) : t_ball =
   ()
 ;;
 
+(**@autor HauNGUYEN*)
 let ball_x(game,ball : t_camlbrick * t_ball) : int =
   (* Itération 2 *)
-  0
+  ball.position.dx
 ;;
 
+(**@autor Hau NGUYEN*)
 let ball_y(game, ball : t_camlbrick * t_ball) : int =
   (* Itération 2 *)
-  0
+  ball.position.dy
 ;;
 
+(**@autor Hau NGUYEN*)
 let ball_size_pixel(game, ball : t_camlbrick * t_ball) : int =
   (* Itération 2 *)
-  0
+  if ball.size = BS_SMALL
+  then 10
+  else if ball.size = BS_MEDIUM
+       then 20
+       else if ball.size = BS_BIG
+            then 30
+            else failwith  "Invalid size of the ball"    
 ;;
 
 let ball_color(game, ball : t_camlbrick * t_ball) : t_camlbrick_color =
