@@ -635,10 +635,11 @@ let canvas_keyreleased(game, keyString, keyCode : t_camlbrick * string * int) =
 (**
   Cette fonction est utilisée par l'interface graphique pour connaitre l'information
   l'information à afficher dans la zone Custom1 de la zone du menu.
+  @autor Hau NGUYEN
 *)
 let custom1_text() : string =
   (* Iteration 4 *)
-  "<Rien1>"
+  "<King Ball>"
 ;;
 
 (**
@@ -647,7 +648,7 @@ let custom1_text() : string =
 *)
 let custom2_text() : string =
   (* Iteration 4 *)
-  "<Rien2>"
+  "<Super Lady>"
 ;;
 
 
