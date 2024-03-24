@@ -189,12 +189,24 @@ let vec2_mult_scalar(a,x,y : t_vec2 * int * int) : t_vec2 =
   {dx = a.dx * x; dy = a.dy * y}
 ;;
 
-
-(* Itération 2 *)
-type t_ball = unit;;
-
-(* Itération 2 *)
-type t_paddle = unit;;
+(** Itération 2 
+  @author Hau NGUYEN *)
+  type t_ball = {
+    position : t_vec2;
+    velocity : t_vec2;
+    size : t_ball_size;
+  }
+  ;;
+  
+  (** Itération 2 
+     @autor Hau NGUYEN *)
+  type t_paddle = {
+    position : t_vec2;
+    size : t_paddle_size;
+    width : int;
+    height : int;
+  }
+  ;;
 
 (**
   Cette structure représente l'état du jeu de casse-brique. 
@@ -276,15 +288,36 @@ let make_camlbrick() : t_camlbrick =
 (**
   Cette fonction crée une raquette par défaut au milieu de l'écran et de taille normal.  
   @deprecated Cette fonction est là juste pour le debug ou pour débuter certains traitements de test.
+  @author HAU NGUYEN
 *)
 let make_paddle() : t_paddle =
   (* Itération 2 *)
- ()
+  {
+    position = {dx = 0; dy = 0};
+    size = PS_MEDIUM;
+    width = 100;
+    height = 20;
+  }
 ;;
 
+(** 
+  Cette fonction permet de créer une balle par défaut au milieu de l'écran et de taille moyenne.
+  @return Renvoie une balle par défaut.
+  @autor Hau NGUYEN    
+*)
 let make_ball(x,y, size : int * int * int) : t_ball =
   (* Itération 3 *)
-  ()
+  let ball_size =
+    if size = 1 then BS_SMALL
+    else if size = 2 then BS_MEDIUM
+    else if size = 3 then BS_BIG
+    else BS_MEDIUM (* Par défaut, taille moyenne *)
+  in
+  {
+    position = {dx = x; dy = y};
+    velocity = {dx = 0; dy = 0};
+    size = ball_size;
+  }
 ;;
 
 (**
@@ -379,12 +412,16 @@ let brick_color(game,i,j : t_camlbrick * int * int) : t_camlbrick_color =
 
 let paddle_x(game : t_camlbrick) : int= 
   (* Itération 2 *)
-  0
+  game.paddle.position.dx
 ;;
 
 let paddle_size_pixel(game : t_camlbrick) : int = 
   (* Itération 2 *)
-  0
+  if game.paddle.size = PS_SMALL 
+    then 60
+    else if game.paddle.size = PS_MEDIUM 
+         then 80
+         else 100 (* PS_BIG *)
 ;;
 
 let paddle_move_left(game : t_camlbrick) : unit = 
@@ -399,17 +436,19 @@ let paddle_move_right(game : t_camlbrick) : unit =
 
 let has_ball(game : t_camlbrick) : bool =
   (* Itération 2 *)
-  false
+  game.ball.position <> make_vec2(0, 0)
 ;;
 
 let balls_count(game : t_camlbrick) : int =
   (* Itération 2 *)
-  0
+  if has_ball(game)
+    then 1
+    else 0
 ;;
 
 let balls_get(game : t_camlbrick) : t_ball list = 
   (* Itération 2 *)
-  []
+  [game.ball]
 ;;
 
 let ball_get(game, i : t_camlbrick * int) : t_ball =
@@ -419,22 +458,32 @@ let ball_get(game, i : t_camlbrick * int) : t_ball =
 
 let ball_x(game,ball : t_camlbrick * t_ball) : int =
   (* Itération 2 *)
-  0
+  ball.position.dx
 ;;
 
 let ball_y(game, ball : t_camlbrick * t_ball) : int =
   (* Itération 2 *)
-  0
+  ball.position.dy
 ;;
 
 let ball_size_pixel(game, ball : t_camlbrick * t_ball) : int =
   (* Itération 2 *)
-  0
+  if ball.size = BS_SMALL
+    then 10
+    else if ball.size = BS_MEDIUM
+         then 20
+         else if ball.size = BS_BIG
+              then 30
+              else failwith  "Invalid size of the ball" 
 ;;
 
 let ball_color(game, ball : t_camlbrick * t_ball) : t_camlbrick_color =
   (* Itération 2 *)
-  GRAY
+  if ball.size = BS_SMALL
+    then YELLOW
+    else if ball.size = BS_MEDIUM
+         then ORANGE
+         else RED  
 ;;
 
 let ball_modif_speed(game, ball, dv : t_camlbrick * t_ball * t_vec2) : unit =
