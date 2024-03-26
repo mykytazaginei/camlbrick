@@ -184,7 +184,6 @@ let vec2_mult_scalar(a,x,y : t_vec2 * int * int) : t_vec2 =
   ]}
     @author Zaginei Mykyta
 *)
-
 let vec2_mult_scalar(a,x,y : t_vec2 * int * int) : t_vec2 =
   {dx = a.dx * x; dy = a.dy * y}
 ;;
@@ -201,10 +200,8 @@ let vec2_mult_scalar(a,x,y : t_vec2 * int * int) : t_vec2 =
   (** Itération 2 
      @autor Hau NGUYEN *)
   type t_paddle = {
-    position : t_vec2;
+    position : int ref ;
     size : t_paddle_size;
-    width : int;
-    height : int;
   }
   ;;
 
@@ -293,10 +290,8 @@ let make_camlbrick() : t_camlbrick =
 let make_paddle() : t_paddle =
   (* Itération 2 *)
   {
-    position = {dx = 0; dy = 0};
+    position = 400;
     size = PS_MEDIUM;
-    width = 100;
-    height = 20;
   }
 ;;
 
@@ -347,22 +342,12 @@ let string_of_gamestate(game : t_camlbrick) : string =
     @return the type of brick at position (i, j) of type [t_brick_kind]. 
     @autor ZAGINEI Mykyta    
 *)
-let brick_get (game, i, j : t_camlbrick * int * int) : t_brick_kind =
-  (* Itération 1 *)
-  if y < 0 
-    then BK_empty
-    else 
-      if y < param.world_empty_height
-      then BK_empty
-      else
-      let row : int = (y - param.world_empty_height) / param.brick_height in
-      if row mod 5 = 0 || row mod 5 = 1 
-      then BK_simple
-      else 
-        if row mod 5 = 2 || row mod 5 = 3
-        then BK_double
-        else BK_block
+let brick_get (bricks, i , j : t_camlbrick array array * int * int) : t_brick_kind =
+  if i < 0 || j < 0 || i >= Array.length(bricks) || j >= Array.length(bricks.(0)) 
+  then BK_empty 
+  else bricks.(i).(j).kind 
 ;;
+
 
 (** 
   Brick_hit qui réalise les modifications dans la zone de brique pour faire évoluer une brique comme si elle était
@@ -409,36 +394,76 @@ let brick_color(game,i,j : t_camlbrick * int * int) : t_camlbrick_color =
     BLACK
 ;;
 
-
+    
+(**
+  Cette function renvoie la position gauche du rectangle symbolisant la raquette.  
+  @param game le jeu en cours
+  @return Renvoie la position gauche de la raquette.
+  @autor Hau NGUYEN
+*)
 let paddle_x(game : t_camlbrick) : int= 
   (* Itération 2 *)
-  game.paddle.position.dx
+  game.paddle.position
 ;;
 
+(**
+  Cette function renvoie la largeur en pixel du rectangle. 
+  @param game le jeu en cours
+  @return Renvoie la largeur en pixel de la raquette.
+  @autor Hau NGUYEN   
+*)
 let paddle_size_pixel(game : t_camlbrick) : int = 
   (* Itération 2 *)
   if game.paddle.size = PS_SMALL 
     then 60
     else if game.paddle.size = PS_MEDIUM 
          then 80
-         else 100 (* PS_BIG *)
+         else 100 
 ;;
 
+(**
+  Cette fonction permet de deplacer la position en gauche de la raquette.
+  @param game le jeu en cours
+  @return Renvoie la position en y de la raquette.
+  @autor  Sardin Alexandre
+  @autor  Zaginei Mykyta
+*)
 let paddle_move_left(game : t_camlbrick) : unit = 
   (* Itération 2 *)
-  ()
+  if game.paddle.position > 20 then 
+    game.paddle.position := game.paddle.position - 20
 ;;
 
+(**
+  Cette fonction permet de deplacer la position en droit de la raquette.
+  @param game le jeu en cours
+  @return Renvoie la position en y de la raquette.
+  @autor  Sardin Alexandre
+  @autor  Zaginei Mykyta
+*)
 let paddle_move_right(game : t_camlbrick) : unit = 
   (* Itération 2 *)
-  ()
- ;;
+  if game.paddle.position < 780 
+    then game.paddle.position := game.paddle.position + 20
+;;
 
+(**
+  Cette fonction permet de récupérer la position en x de la balle.
+  @param game le jeu en cours
+  @return Renvoie la position en x de la balle.
+  @autor Hau NGUYEN
+*)
 let has_ball(game : t_camlbrick) : bool =
   (* Itération 2 *)
   game.ball.position <> make_vec2(0, 0)
 ;;
 
+(**
+  Cette fonction permet de récupérer le nombre de balles dans le jeu.
+  @param game le jeu en cours
+  @return Renvoie le nombre de balles.
+  @autor Hau NGUYEN    
+*)
 let balls_count(game : t_camlbrick) : int =
   (* Itération 2 *)
   if has_ball(game)
@@ -446,44 +471,88 @@ let balls_count(game : t_camlbrick) : int =
     else 0
 ;;
 
+(**
+  Cette fonction permet de récupérer la liste des balles du jeu.
+  @param game le jeu en cours
+  @return Renvoie la liste des balles.
+  @autor Hai NGUYEN
+*)
 let balls_get(game : t_camlbrick) : t_ball list = 
   (* Itération 2 *)
   [game.ball]
 ;;
 
+(**
+  Cette fonction permet de récupérer une balle à partir de son index.
+  @param game le jeu en cours
+  @param i l'index de la balle
+  @return Renvoie la balle correspondante à l'index.
+  @autor ZAGINEI Mykyta
+*)
 let ball_get(game, i : t_camlbrick * int) : t_ball =
   (* Itération 2 *)
-  ()
+  if i < 0 || i >= Array.length game.balls then
+     (Invalid_argument "Invalid ball index")
+  else
+    game.balls.(i)
 ;;
 
+(**
+  Cette fonction permet de récupérer la position en x d'une balle.
+  @param game le jeu en cours
+  @param ball la balle
+  @return Renvoie la position en x de la balle.
+  @autor Hai NGUYEN
+*)
 let ball_x(game,ball : t_camlbrick * t_ball) : int =
   (* Itération 2 *)
   ball.position.dx
 ;;
 
+(**
+  Cette fonction permet de récupérer la position en y d'une balle.
+  @param game le jeu en cours
+  @param ball la balle
+  @return Renvoie la position en y de la balle.
+  @autor Hai NGUYEN
+*)
 let ball_y(game, ball : t_camlbrick * t_ball) : int =
   (* Itération 2 *)
   ball.position.dy
 ;;
 
+(**
+  Cette fonction permet de récupérer la taille en pixel d'une balle.
+  @param game le jeu en cours
+  @param ball la balle
+  @return Renvoie la taille en pixel de la balle.
+  @autor Hai NGUYEN
+*)
 let ball_size_pixel(game, ball : t_camlbrick * t_ball) : int =
   (* Itération 2 *)
   if ball.size = BS_SMALL
     then 10
-    else if ball.size = BS_MEDIUM
-         then 20
-         else if ball.size = BS_BIG
-              then 30
-              else failwith  "Invalid size of the ball" 
+  else if ball.size = BS_MEDIUM
+    then 20
+  else if ball.size = BS_BIG
+    then 30
+  else failwith  "Invalid size of the ball" 
 ;;
 
+(**
+  Cette fonction permet de récupérer la couleur d'une balle.
+  @param game le jeu en cours
+  @param ball la balle
+  @return Renvoie la couleur de la balle.
+  @autor Hai NGUYEN
+*)
 let ball_color(game, ball : t_camlbrick * t_ball) : t_camlbrick_color =
   (* Itération 2 *)
   if ball.size = BS_SMALL
     then YELLOW
-    else if ball.size = BS_MEDIUM
-         then ORANGE
-         else RED  
+  else if ball.size = BS_MEDIUM
+    then ORANGE
+  else RED  
 ;;
 
 let ball_modif_speed(game, ball, dv : t_camlbrick * t_ball * t_vec2) : unit =

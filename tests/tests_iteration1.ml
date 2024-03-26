@@ -4,17 +4,12 @@
 open CPtestfonc;;
 
 
-(* Initialisation du rapport de test. *)
-test_reset_report();;
-
-type t_vec2 = {dx : int ; dy : int};;
-
-let make_vec2(x,y : int * int) : t_vec2 = 
-  {dx = x ; dy = y}
-;;
-
-(** crée un vecteur avec les valeurs positives données (3, 5). Si le résultat ne correspond pas au résultat attendu {dx = 3; dy = 5}, cela déclenchera un échec d'assertion. 
-    @autor Hau NGUYEN*)
+(** 
+  crée un vecteur avec les valeurs positives données (3, 5). 
+  Si le résultat ne correspond pas au résultat attendu {dx = 3; dy = 5}, 
+  cela déclenchera un échec d'assertion. 
+  @autor Hau NGUYEN
+*)
 let test_fonc_make_vec2 () : unit =
   let res : t_vec2 t_test_result =
      test_exec(make_vec2, "test avec positive values" ,(3,5)) in
