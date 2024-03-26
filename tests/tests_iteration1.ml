@@ -5,14 +5,18 @@ open CPtestfonc;;
 
 
 (** 
-    @autor Hau NGUYEN*)
+  crée un vecteur avec les valeurs positives données (3, 5). 
+  Si le résultat ne correspond pas au résultat attendu {dx = 3; dy = 5}, 
+  cela déclenchera un échec d'assertion. 
+  @autor Hau NGUYEN
+*)
 let test_fonc_make_vec2 () : unit =
   let res : t_vec2 t_test_result =
      test_exec(make_vec2, "test avec positive values" ,(3,5)) in
   assert_equals_result_m("Test dx,dy", {dx = 3; dy = 5}, res)
 ;;
 
-(**Test de l'addition de vecteurs. 
+(**crée vecteur1,2 avec les valeurs. Si le résultat ne correspond pas au résultat attendu {dx = 4; dy = 6}, cela déclenchera un échec d'assertion.
     @autor Hau NGUYEN*)
 let test_fonc_vec2_add () : unit =
   let vec1 = {dx = 1; dy = 2 } in
@@ -22,7 +26,7 @@ let test_fonc_vec2_add () : unit =
   assert_equals_result_m ("Test résultat de l'addition", {dx = 4; dy = 6}, res)
   ;;
 
-  (**test d'addition scalaire au vecteur
+  (**crée un vecteur v et scalar_x, scalar_y. Si le résultat ne correspond pas au résultat attendu {dx = 4; dy = 6}, cela déclenchera un échec d'assertion.
       @autor Hau NGUYEN*)
 let test_fonc_vec2_add_scalar () : unit =
     let vec = { dx = 1; dy = 2 } in
@@ -33,7 +37,7 @@ let test_fonc_vec2_add_scalar () : unit =
     assert_equals_result_m ("Test ajout scalaire x", {dx=4; dy=6} ,res)
   ;;
   
-  (**test de multiplication de vecteurs
+  (**crée vecteur vec1, vec2. Si le résultat ne correspond pas au résultat attendu {dx = 8; dy = 15}, cela déclenchera un échec d'assertion.
       @autor Hau NGUYEN*)
   let test_fonc_vec2_mult () : unit =
     let vec1 = { dx = 2; dy = 3 } in
@@ -43,7 +47,7 @@ let test_fonc_vec2_add_scalar () : unit =
     assert_equals_result_m ("Test résultat de la multiplication", { dx = 8; dy = 15 }, res)
     ;;
 
-(**test de multiplication scalaire au vecteur
+(**crée un vecteur v et scalar_x, scalar_y. Si le résultat ne correspond pas au résultat attendu {dx = 8; dy = 15}, cela déclenchera un échec d'assertion.
       @autor Hau NGUYEN*)
 let test_fonc_vec2_mult_scalar () : unit =
       let vec = { dx = 2; dy = 3 } in
@@ -53,7 +57,7 @@ let test_fonc_vec2_mult_scalar () : unit =
         test_exec (vec2_mult_scalar, "test de multiplication scalaire au vecteur", (vec, scalar_x, scalar_y)) in
       assert_equals_result_m ("Test résultat de la multiplication scalaire", { dx = 8; dy = 15 }, res);;
 
-(**test de récupération des paramètres du jeu
+(**ajoute des valeur et test de récupération des paramètres du jeu. Si le résultat correspond au résultat attendu. C'est correct.
           @autor Hau NGUYEN*)
 let test_fonc_param_get () : unit =
   let params = make_camlbrick_param () in
