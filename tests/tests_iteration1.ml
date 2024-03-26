@@ -256,4 +256,3 @@ test_brick_hit ();;
 test_brick_color ();;
 (* Affiche le rapport de test *)
   test_report();;  
-
