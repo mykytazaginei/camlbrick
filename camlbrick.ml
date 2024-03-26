@@ -9,8 +9,10 @@ aspect visuel! Vous pouvez utiliser le mode console.
 Le principe du jeu de casse-brique consiste à faire disparaître toutes les briques d'un niveau
 en utilisant les rebonds d'une balle depuis une raquette contrôlée par l'utilisateur.
 
-@author Hakim Ferrier-Belhaouari
-@author Agnès Arnould
+@author ZAGINEI Mykyta
+@author NGUYEN Hau 
+@author TOTSKYI Hlib
+@author SARDIN Alexandre
 
 @version 1
 *)
