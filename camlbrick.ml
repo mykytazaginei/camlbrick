@@ -314,21 +314,10 @@ let string_of_gamestate(game : t_camlbrick) : string =
     @return the type of brick at position (i, j) of type [t_brick_kind]. 
     @autor ZAGINEI Mykyta    
 *)
-let brick_get (game, i, j : t_camlbrick * int * int) : t_brick_kind =
-  (* Itération 1 *)
-  if y < 0 
-    then BK_empty
-    else 
-      if y < param.world_empty_height
-      then BK_empty
-      else
-      let row : int = (y - param.world_empty_height) / param.brick_height in
-      if row mod 5 = 0 || row mod 5 = 1 
-      then BK_simple
-      else 
-        if row mod 5 = 2 || row mod 5 = 3
-        then BK_double
-        else BK_block
+let brick_get (bricks, i , j : t_camlbrick array array * int * int) : t_brick_kind =
+  if i < 0 || j < 0 || i >= Array.length(bricks) || j >= Array.length(bricks.(0)) 
+  then BK_empty 
+  else bricks.(i).(j).kind 
 ;;
 
 (** 
