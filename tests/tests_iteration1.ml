@@ -4,16 +4,7 @@
 open CPtestfonc;;
 
 
-(* Initialisation du rapport de test. *)
-test_reset_report();;
-
-type t_vec2 = {dx : int ; dy : int};;
-
-let make_vec2(x,y : int * int) : t_vec2 = 
-  {dx = x ; dy = y}
-;;
-
-(** Test d une valeur positive. 
+(** 
     @autor Hau NGUYEN*)
 let test_fonc_make_vec2 () : unit =
   let res : t_vec2 t_test_result =
