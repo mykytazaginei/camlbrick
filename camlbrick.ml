@@ -194,12 +194,12 @@ let vec2_mult_scalar(a,x,y : t_vec2 * int * int) : t_vec2 =
   @author Hau NGUYEN
   @autor ZAGINEI Mykyta
   *)
-
 type t_ball = {
   position : t_vec2 ref;
   velocity : int;
   size : t_ball_size
 }
+
 
   
   (** Itération 2 
