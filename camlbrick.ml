@@ -434,20 +434,20 @@ let paddle_size_pixel(game : t_camlbrick) : int =
 *)
 let paddle_move_left(game : t_camlbrick) : unit = 
   (* Itération 2 *)
-  if game.paddle.position > 20 then 
-    game.paddle.position := game.paddle.position - 20
+  if game.paddle.position > 0 
+    then game.paddle.position := game.paddle.position - 20
 ;;
 
 (**
   Cette fonction permet de deplacer la position en droit de la raquette.
-  @param game le jeu en cours
+  @param game le jeu en cours 
   @return Renvoie la position en y de la raquette.
   @autor  Sardin Alexandre
   @autor  Zaginei Mykyta
 *)
 let paddle_move_right(game : t_camlbrick) : unit = 
   (* Itération 2 *)
-  if game.paddle.position < 780 
+  if game.paddle.position + game.paddle.width < game.world_size
     then game.paddle.position := game.paddle.position + 20
 ;;
 
