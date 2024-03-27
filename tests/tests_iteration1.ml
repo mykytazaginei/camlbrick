@@ -178,7 +178,7 @@ let test_brick_get () : unit =
   Cette fonction `test_brick_hit` est utilisée pour tester la fonction `brick_hit`.
   Elle crée un tableau 2D de briques et affirme les valeurs attendues renvoyées par la fonction `brick_hit`.
   La fonction `brick_hit` prend en compte le jeu, ainsi que les indices de ligne et de colonne, et renvoie le type de brique à cette position après avoir été touchée par la balle.
-  @autor Hlib TOTSKYI    
+  @autor SARDIN Alexandre  
 *)
 let test_brick_hit () : unit =
   let bricks = [|
