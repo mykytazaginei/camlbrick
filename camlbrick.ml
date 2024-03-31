@@ -194,13 +194,12 @@ let vec2_mult_scalar(a,x,y : t_vec2 * int * int) : t_vec2 =
   @author Hau NGUYEN
   @autor ZAGINEI Mykyta
   *)
-type t_ball = {
-  position : t_vec2 ref;
-  velocity : int;
-  size : t_ball_size
-}
-
-
+  type t_ball = {
+    position : t_vec2 ref;
+    velocity : int;
+    size : t_ball_size;
+  }
+  ;;
   
   (** Itération 2 
      @autor Hau NGUYEN *)
@@ -480,7 +479,7 @@ let balls_count(game : t_camlbrick) : int =
   Cette fonction permet de récupérer la liste des balles du jeu.
   @param game le jeu en cours
   @return Renvoie la liste des balles.
-  @autor Hau NGUYEN
+  @autor Hai NGUYEN
 *)
 let balls_get(game : t_camlbrick) : t_ball list = 
   (* Itération 2 *)
@@ -507,7 +506,7 @@ let ball_get(game, i : t_camlbrick * int) : t_ball =
   @param game le jeu en cours
   @param ball la balle
   @return Renvoie la position en x de la balle.
-  @autor Hau NGUYEN
+  @autor Hai NGUYEN
 *)
 let ball_x(game,ball : t_camlbrick * t_ball) : int =
   (* Itération 2 *)
@@ -519,7 +518,7 @@ let ball_x(game,ball : t_camlbrick * t_ball) : int =
   @param game le jeu en cours
   @param ball la balle
   @return Renvoie la position en y de la balle.
-  @autor Hau NGUYEN
+  @autor Hai NGUYEN
 *)
 let ball_y(game, ball : t_camlbrick * t_ball) : int =
   (* Itération 2 *)
@@ -531,7 +530,7 @@ let ball_y(game, ball : t_camlbrick * t_ball) : int =
   @param game le jeu en cours
   @param ball la balle
   @return Renvoie la taille en pixel de la balle.
-  @autor Hau NGUYEN
+  @autor Hai NGUYEN
 *)
 let ball_size_pixel(game, ball : t_camlbrick * t_ball) : int =
   (* Itération 2 *)
@@ -549,7 +548,7 @@ let ball_size_pixel(game, ball : t_camlbrick * t_ball) : int =
   @param game le jeu en cours
   @param ball la balle
   @return Renvoie la couleur de la balle.
-  @autor Hau NGUYEN
+  @autor Hai NGUYEN
 *)
 let ball_color(game, ball : t_camlbrick * t_ball) : t_camlbrick_color =
   (* Itération 2 *)
