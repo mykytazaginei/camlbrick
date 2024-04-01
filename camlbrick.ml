@@ -295,29 +295,18 @@ let make_camlbrick() : t_camlbrick =
 let make_paddle() : t_paddle =
   (* Itération 2 *)
   {
-    position = 400;
+    position = ref 400;
     size = PS_MEDIUM;
   }
 ;;
 
 (** 
   Cette fonction permet de créer une balle par défaut au milieu de l'écran et de taille moyenne.
-  @return Renvoie une balle par défaut.
-  @autor Hau NGUYEN    
+  @return Renvoie une balle par défaut.  
 *)
 let make_ball(x,y, size : int * int * int) : t_ball =
   (* Itération 3 *)
-  let ball_size =
-    if size = 1 then BS_SMALL
-    else if size = 2 then BS_MEDIUM
-    else if size = 3 then BS_BIG
-    else BS_MEDIUM (* Par défaut, taille moyenne *)
-  in
-  {
-    position = {dx = x; dy = y};
-    velocity = {dx = 0; dy = 0};
-    size = ball_size;
-  }
+  
 ;;
 
 (**
@@ -348,9 +337,9 @@ let string_of_gamestate(game : t_camlbrick) : string =
     @autor ZAGINEI Mykyta    
 *)
 let brick_get (bricks, i , j : t_camlbrick array array * int * int) : t_brick_kind =
-  if i < 0 || j < 0 || i >= Array.length(bricks) || j >= Array.length(bricks.(0)) 
+  if i < 0 || j < 0 || i >= Array.length bricks || j >= Array.length bricks.(0) 
   then BK_empty 
-  else bricks.(i).(j).kind 
+  else bricks.(i).(j).bricks.(0).(0)
 ;;
 
 
@@ -406,7 +395,7 @@ let brick_color(game,i,j : t_camlbrick * int * int) : t_camlbrick_color =
   @return Renvoie la position gauche de la raquette.
   @autor Hau NGUYEN
 *)
-let paddle_x(game : t_camlbrick) : int= 
+let paddle_x(game : t_camlbrick) : int ref= 
   (* Itération 2 *)
   game.paddle.position
 ;;
@@ -435,8 +424,8 @@ let paddle_size_pixel(game : t_camlbrick) : int =
 *)
 let paddle_move_left(game : t_camlbrick) : unit = 
   (* Itération 2 *)
-  if game.paddle.position > 0 
-    then game.paddle.position := game.paddle.position - 20
+  if !(game.paddle.position) > 0 
+    then game.paddle.position := !(game.paddle.position) - 20
 ;;
 
 (**
@@ -448,8 +437,8 @@ let paddle_move_left(game : t_camlbrick) : unit =
 *)
 let paddle_move_right(game : t_camlbrick) : unit = 
   (* Itération 2 *)
-  if game.paddle.position + game.paddle.width < game.world_size
-    then game.paddle.position := game.paddle.position + 20
+  if !(game.paddle.position) + paddle_size_pixel(game) < game.params.world_width
+    then game.paddle.position := !(game.paddle.position) + 20
 ;;
 
 (**
@@ -460,7 +449,7 @@ let paddle_move_right(game : t_camlbrick) : unit =
 *)
 let has_ball(game : t_camlbrick) : bool =
   (* Itération 2 *)
-  game.ball.position <> make_vec2(0, 0)
+  !(game.ball.position) <> make_vec2(0, 0) 
 ;;
 
 (**
@@ -496,10 +485,11 @@ let balls_get(game : t_camlbrick) : t_ball list =
 *)
 let ball_get(game, i : t_camlbrick * int) : t_ball =
   (* Itération 2 *)
-  if i < 0 || i >= Array.length game.balls then
-     (Invalid_argument "Invalid ball index")
+  let balls = Array.of_list (balls_get(game)) in
+  if i < 0 || i >= Array.length balls then
+     failwith "Invalid ball index"
   else
-    game.balls.(i)
+    balls.(i)
 ;;
 
 (**
@@ -509,9 +499,9 @@ let ball_get(game, i : t_camlbrick * int) : t_ball =
   @return Renvoie la position en x de la balle.
   @autor Hai NGUYEN
 *)
-let ball_x(game,ball : t_camlbrick * t_ball) : int =
+let ball_x(game, ball : t_camlbrick * t_ball) : int  =
   (* Itération 2 *)
-  ball.position.dx
+  !(ball.position).dx
 ;;
 
 (**
@@ -523,7 +513,7 @@ let ball_x(game,ball : t_camlbrick * t_ball) : int =
 *)
 let ball_y(game, ball : t_camlbrick * t_ball) : int =
   (* Itération 2 *)
-  ball.position.dy
+  !(ball.position).dy
 ;;
 
 (**
