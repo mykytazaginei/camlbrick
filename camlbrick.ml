@@ -264,26 +264,27 @@ let param_get(game : t_camlbrick) : t_camlbrick_param =
     Elle initialise les paramètres du jeu, la balle, la raquette, les briques, le score et l'état.
 
     @return A new instance of the game state for CamlBrick.
+    @autor Mykyta ZAGINEI
     @autor Hau NGUYEN
 *)
 let make_camlbrick() : t_camlbrick = 
+  let ball_position = ref (make_vec2(0, 0)) in
+  let paddle_position = ref 0 in
   {
     params = make_camlbrick_param ();
     ball = {
-      position = make_vec2(0, 0);
-      velocity = make_vec2(0, 0);
+      position = ball_position;
+      velocity = 0; 
       size = BS_MEDIUM;
     };
     paddle = {
-      position = make_vec2(0, 0);
+      position = paddle_position;
       size = PS_SMALL;
-      width = 0;
-      height = 0;
     };
     bricks = [|[||]|];
     score = 0;
     state = GAMEOVER;
-  }  
+  }
 ;;
 
 (**
