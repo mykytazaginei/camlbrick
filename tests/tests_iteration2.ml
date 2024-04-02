@@ -31,29 +31,6 @@ let test_paddle_x () : unit =
   let expected_position : int ref = ref 50 in
   assert_equals(50, !res);;
 
-(** [test_paddle_x_return_type ()] est un test unitaire qui vérifie si le type de retour de la fonction [paddle_x] est un [int ref]. 
-    Le test crée un état de jeu avec une pagaie positionnée à la coordonnée x 50. Il affirme ensuite que le type de la valeur renvoyée par la fonction [paddle_x] est un [int ref]
-    @author Mykyta ZAGINEI 
-    *)
-let test_paddle_x_return_type () : unit =
-  let game : t_camlbrick = {
-    params = make_camlbrick_param ();
-    ball = {
-      position = ref (make_vec2(0, 0));
-      velocity = 0; 
-      size = BS_MEDIUM;
-    };
-    paddle = {
-      position = ref 50;
-      size = PS_SMALL;
-    };
-    bricks = [|[||]|];
-    score = 0;
-    state = GAMEOVER;
-  }in
-  assert_true (type_of (paddle_x game) = int ref);;
-  
-
 (** [test_paddle_size_pixel ()] est une fonction de test unitaire qui teste la fonction [paddle_size_pixel].
     Elle crée trois instances de jeu avec différentes tailles de pagaies (petite, moyenne et grande) et affirme que la fonction [paddle_size_pixel] 
     renvoie les valeurs attendues pour chaque instance de jeu.
@@ -113,47 +90,7 @@ let test_paddle_size_pixel () : unit =
   assert_equals_result (80, res_medium) ;
   assert_equals_result (100, res_big) ;;
 
-(** [test_paddle_size_pixel_return_type ()] est une fonction de test unitaire qui teste le type de retour de la fonction [paddle_size_pixel].
-    Elle crée une instance de jeu avec une petite taille de pagaie et affirme que le type de retour de la fonction [paddle_size_pixel] est le même que le type de 0.
-    @author Mykyta ZAGINEI
-    *)
-let test_paddle_size_pixel_return_type () : unit =
-  let game = 
-    { params = make_camlbrick_param ();
-      ball = {
-        position = ref (make_vec2(0, 0));
-        velocity = 0; 
-        size = BS_MEDIUM;
-      };
-      paddle = {
-        position = ref 50;
-        size = PS_SMALL;
-      };
-      bricks = [|[||]|];
-      score = 0;
-      state = GAMEOVER;
-    } in
-  let result : int t_test_result = test_exece(paddle_size_pixel," ", game) in
-  assert_equal_result ((type_of result) (int)) ;;
-
-let test_has_ball_true() : unit = 
-  let game = {
-    params = make_camlbrick_param ();
-    ball = {
-      position = ref (make_vec2(10, 15));
-      velocity = 0; 
-      size = BS_MEDIUM;
-    };
-    paddle = {
-      position = ref 50;
-      size = PS_SMALL;
-    };
-    bricks = [|[||]|];
-    score = 0;
-    state = GAMEOVER;
-  } in
-  let res : bool t_test_result = test_exec(has_ball,"test avec true", game)  in
-  assert_true_result (res);;
+(
 (** [test_has_ball_true ()] est une fonction de test unitaire qui teste la fonction [has_ball]
     en s'attendant à ce qu'elle renvoie [true]. Elle crée un état de jeu avec une balle,
     une raquette, des briques, un score et un état de jeu. Elle exécute ensuite la fonction [has_ball] sur l'état du jeu et affirme qu'elle renvoie [true].
