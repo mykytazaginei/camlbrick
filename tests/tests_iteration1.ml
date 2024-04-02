@@ -1,6 +1,4 @@
 #use "CPtest.ml";; 
-#load "CPtestfonc.cma";;
-open CPtestfonc;;
 #use "camlbrick.ml";;
 
 (** 
