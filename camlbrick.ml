@@ -304,10 +304,10 @@ let make_paddle() : t_paddle =
   Cette fonction permet de créer une balle par défaut au milieu de l'écran et de taille moyenne.
   @return Renvoie une balle par défaut.  
 *)
-let make_ball(x,y, size : int * int * int) : t_ball =
+(*let make_ball(x,y, size : int * int * int) : t_ball =
   (* Itération 3 *)
-  
-;;
+  ()
+;;*)
 
 (**
   Fonction utilitaire qui permet de traduire l'état du jeu sous la forme d'une chaîne de caractère.
