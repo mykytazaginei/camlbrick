@@ -469,7 +469,7 @@ let balls_count(game : t_camlbrick) : int =
   Cette fonction permet de récupérer la liste des balles du jeu.
   @param game le jeu en cours
   @return Renvoie la liste des balles.
-  @autor Hai NGUYEN
+  @autor Hau NGUYEN
 *)
 let balls_get(game : t_camlbrick) : t_ball list = 
   (* Itération 2 *)
@@ -497,7 +497,7 @@ let ball_get(game, i : t_camlbrick * int) : t_ball =
   @param game le jeu en cours
   @param ball la balle
   @return Renvoie la position en x de la balle.
-  @autor Hai NGUYEN
+  @autor Hau NGUYEN
 *)
 let ball_x(game, ball : t_camlbrick * t_ball) : int  =
   (* Itération 2 *)
@@ -509,7 +509,7 @@ let ball_x(game, ball : t_camlbrick * t_ball) : int  =
   @param game le jeu en cours
   @param ball la balle
   @return Renvoie la position en y de la balle.
-  @autor Hai NGUYEN
+  @autor Hau NGUYEN
 *)
 let ball_y(game, ball : t_camlbrick * t_ball) : int =
   (* Itération 2 *)
@@ -521,7 +521,7 @@ let ball_y(game, ball : t_camlbrick * t_ball) : int =
   @param game le jeu en cours
   @param ball la balle
   @return Renvoie la taille en pixel de la balle.
-  @autor Hai NGUYEN
+  @autor Hau NGUYEN
 *)
 let ball_size_pixel(game, ball : t_camlbrick * t_ball) : int =
   (* Itération 2 *)
@@ -539,7 +539,7 @@ let ball_size_pixel(game, ball : t_camlbrick * t_ball) : int =
   @param game le jeu en cours
   @param ball la balle
   @return Renvoie la couleur de la balle.
-  @autor Hai NGUYEN
+  @autor Hau NGUYEN
 *)
 let ball_color(game, ball : t_camlbrick * t_ball) : t_camlbrick_color =
   (* Itération 2 *)
