@@ -196,7 +196,7 @@ let vec2_mult_scalar(a,x,y : t_vec2 * int * int) : t_vec2 =
   *)
   type t_ball = {
     position : t_vec2 ref;
-    velocity : int;
+    velocity : t_vec2;
     size : t_ball_size;
   }
   ;;
@@ -274,7 +274,7 @@ let make_camlbrick() : t_camlbrick =
     params = make_camlbrick_param ();
     ball = {
       position = ball_position;
-      velocity = 0; 
+      velocity = make_vec2(0, 0); 
       size = BS_MEDIUM;
     };
     paddle = {
@@ -304,10 +304,20 @@ let make_paddle() : t_paddle =
   Cette fonction permet de créer une balle par défaut au milieu de l'écran et de taille moyenne.
   @return Renvoie une balle par défaut.  
 *)
-(*let make_ball(x,y, size : int * int * int) : t_ball =
-  (* Itération 3 *)
-  ()
-;;*)
+let make_ball(x,y, size : int * int * int) : t_ball =
+      (* Itération 3 *)
+      let ball_size =
+        if size = 1 then BS_SMALL
+        else if size = 2 then BS_MEDIUM
+        else if size = 3 then BS_BIG
+        else BS_MEDIUM (* Par défaut, taille moyenne *)
+      in
+      {
+        position = ref {dx = x; dy = y};
+        velocity = make_vec2(10, 10);
+        size = ball_size;
+      }
+;;
 
 (**
   Fonction utilitaire qui permet de traduire l'état du jeu sous la forme d'une chaîne de caractère.
@@ -419,8 +429,8 @@ let paddle_size_pixel(game : t_camlbrick) : int =
   Cette fonction permet de deplacer la position en gauche de la raquette.
   @param game le jeu en cours
   @return Renvoie la position en y de la raquette.
-  @autor  Sardin Alexandre
-  @autor  Zaginei Mykyta
+  @autor Sardin Alexandre
+  @autor Zaginei Mykyta
 *)
 let paddle_move_left(game : t_camlbrick) : unit = 
   (* Itération 2 *)
@@ -432,8 +442,8 @@ let paddle_move_left(game : t_camlbrick) : unit =
   Cette fonction permet de deplacer la position en droit de la raquette.
   @param game le jeu en cours 
   @return Renvoie la position en y de la raquette.
-  @autor  Sardin Alexandre
-  @autor  Zaginei Mykyta
+  @autor Sardin Alexandre
+  @autor Zaginei Mykyta
 *)
 let paddle_move_right(game : t_camlbrick) : unit = 
   (* Itération 2 *)
@@ -549,26 +559,49 @@ let ball_color(game, ball : t_camlbrick * t_ball) : t_camlbrick_color =
     then ORANGE
   else RED  
 ;;
-
-let ball_modif_speed(game, ball, dv : t_camlbrick * t_ball * t_vec2) : unit =
-  (* Itération 3 *)
-  ()
+(*refaire*)
+let ball_modif_speed (game, ball, dv : t_camlbrick * t_ball * t_vec2) : unit =
+  let (dx, dy) = dv in
+  let new_velocity = { dx = ball.velocity.dx + dx; dy = ball.velocity.dy + dy } in
+  ball.velocity <- new_velocity
 ;;
-
-
+(*refaire*)
 let ball_modif_speed_sign(game, ball, sv : t_camlbrick * t_ball * t_vec2) : unit =
   (* Itération 3 *)
-  ()
+  let (sx, sy) = sv in
+  let new_velocity = { dx = ball.velocity.dx * sx; dy = ball.velocity.dy * sy } in
+  ball.velocity <- new_velocity
 ;;
 
-let is_inside_circle(cx,cy,rad, x, y : int * int * int * int * int) : bool =
+(**
+  Cette fonction permet de déplacer une balle en fonction de sa vitesse.
+  @param game le jeu en cours
+  @param ball la balle
+  @return Renvoie la balle après le déplacement.
+  @autor Hlib TOTSKYI
+*)
+let is_inside_circle(cx, cy, rad, x, y : int * int * int * int * int) : bool =
   (* Itération 3 *)
-  false
+  let dx = x - cx in
+  let dy = y - cy in
+  let distance_squared = dx * dx + dy * dy in
+  distance_squared <= rad * rad
 ;;
 
+(**
+  Cette fonction permet de vérifier si un point est à l'intérieur d'un rectangle.
+  @param x1 la position en x du coin supérieur gauche du rectangle
+  @param y1 la position en y du coin supérieur gauche du rectangle
+  @param x2 la position en x du coin inférieur droit du rectangle
+  @param y2 la position en y du coin inférieur droit du rectangle
+  @param x la position en x du point
+  @param y la position en y du point
+  @return Renvoie vrai si le point est à l'intérieur du rectangle, faux sinon.
+  @autor Mykyta ZAGINEI   
+*)
 let is_inside_quad(x1,y1,x2,y2, x,y : int * int * int * int * int * int) : bool =
   (* Itération 3 *)
-  false
+  x >= x1 && x <= x2 && y >= y1 && y <= y2
 ;;
 
 

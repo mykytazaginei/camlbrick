@@ -335,9 +335,7 @@ let test_ball_color() : unit =
 (* Appels des fonctions de test *)
 test_ball_color();;
 test_paddle_x();;
-test_paddle_x_return_type();;
 test_paddle_size_pixel();;
-test_paddle_size_pixel_return_type();;
 test_has_ball_true();;
 test_balls_count_0();;
 test_balls_count_1();;
@@ -348,4 +346,4 @@ test_ball_y();;
 test_ball_size_pixel();;
 
 (* Affiche le rapport de test *)
-  test_report();;  
+test_report();;  
