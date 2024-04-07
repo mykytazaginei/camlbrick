@@ -196,7 +196,7 @@ let vec2_mult_scalar(a,x,y : t_vec2 * int * int) : t_vec2 =
   *)
   type t_ball = {
     position : t_vec2 ref;
-    velocity : t_vec2;
+    velocity : t_vec2 ref;
     size : t_ball_size;
   }
   ;;
@@ -274,7 +274,7 @@ let make_camlbrick() : t_camlbrick =
     params = make_camlbrick_param ();
     ball = {
       position = ball_position;
-      velocity = make_vec2(0, 0); 
+      velocity = ref(make_vec2(0, 0)); 
       size = BS_MEDIUM;
     };
     paddle = {
@@ -305,18 +305,18 @@ let make_paddle() : t_paddle =
   @return Renvoie une balle par défaut.  
 *)
 let make_ball(x,y, size : int * int * int) : t_ball =
-      (* Itération 3 *)
-      let ball_size =
-        if size = 1 then BS_SMALL
-        else if size = 2 then BS_MEDIUM
-        else if size = 3 then BS_BIG
-        else BS_MEDIUM (* Par défaut, taille moyenne *)
-      in
-      {
-        position = ref {dx = x; dy = y};
-        velocity = make_vec2(10, 10);
-        size = ball_size;
-      }
+  (* Itération 3 *)
+  let ball_size =
+    if size = 1 then BS_SMALL
+    else if size = 2 then BS_MEDIUM
+    else if size = 3 then BS_BIG
+    else BS_MEDIUM (* Par défaut, taille moyenne *)
+    in
+    {
+      position = ref {dx = x; dy = y};
+      velocity = ref(make_vec2(10, 10));
+      size = ball_size;
+    }
 ;;
 
 (**
@@ -405,9 +405,9 @@ let brick_color(game,i,j : t_camlbrick * int * int) : t_camlbrick_color =
   @return Renvoie la position gauche de la raquette.
   @autor Hau NGUYEN
 *)
-let paddle_x(game : t_camlbrick) : int ref= 
+let paddle_x(game : t_camlbrick) : int = 
   (* Itération 2 *)
-  game.paddle.position
+  !(game.paddle.position)
 ;;
 
 (**
@@ -420,9 +420,9 @@ let paddle_size_pixel(game : t_camlbrick) : int =
   (* Itération 2 *)
   if game.paddle.size = PS_SMALL 
     then 60
-    else if game.paddle.size = PS_MEDIUM 
-         then 80
-         else 100 
+  else if game.paddle.size = PS_MEDIUM 
+    then 80
+  else 100 
 ;;
 
 (**
@@ -559,18 +559,28 @@ let ball_color(game, ball : t_camlbrick * t_ball) : t_camlbrick_color =
     then ORANGE
   else RED  
 ;;
-(*refaire*)
+
+(**
+  Cette fonction permet de modifier la vitesse en x d'une balle.
+  @param game le jeu en cours
+  @param ball la balle
+  @return Renvoie la vitesse en x de la balle.
+  @autor Mykyta ZAGINEI    
+*)
 let ball_modif_speed (game, ball, dv : t_camlbrick * t_ball * t_vec2) : unit =
-  let (dx, dy) = dv in
-  let new_velocity = { dx = ball.velocity.dx + dx; dy = ball.velocity.dy + dy } in
-  ball.velocity <- new_velocity
+  ball.velocity := vec2_add (!(ball.velocity), dv)
 ;;
-(*refaire*)
+
+(**
+  Cette fonction permet de modifie la vitesse d'une
+  balle par multiplication avec un vecteur.
+  @param game le jeu en cours
+  @param ball la balle
+  @return Renvoie la vitesse en x de la balle.
+  @autor Mykyta ZAGINEI     
+*)
 let ball_modif_speed_sign(game, ball, sv : t_camlbrick * t_ball * t_vec2) : unit =
-  (* Itération 3 *)
-  let (sx, sy) = sv in
-  let new_velocity = { dx = ball.velocity.dx * sx; dy = ball.velocity.dy * sy } in
-  ball.velocity <- new_velocity
+  ball.velocity := vec2_mult (!(ball.velocity), sv)
 ;;
 
 (**
