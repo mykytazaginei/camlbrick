@@ -346,12 +346,9 @@ let string_of_gamestate(game : t_camlbrick) : string =
     @return the type of brick at position (i, j) of type [t_brick_kind]. 
     @autor ZAGINEI Mykyta    
 *)
-let brick_get (bricks, i , j : t_camlbrick array array * int * int) : t_brick_kind =
-  if i < 0 || j < 0 || i >= Array.length bricks || j >= Array.length bricks.(0) 
-  then BK_empty 
-  else bricks.(i).(j).bricks.(0).(0)
+let brick_get (game, i , j : t_camlbrick * int * int) : t_brick_kind =
+    game.bricks.(i).(j)
 ;;
-
 
 (** 
   Brick_hit qui réalise les modifications dans la zone de brique pour faire évoluer une brique comme si elle était
@@ -800,12 +797,20 @@ let speed_change(game,xspeed : t_camlbrick * int) : unit=
 ;;
 
 
+let animate_action(game : t_camlbrick) : unit =
+  if game.state = PLAYING then begin
+    let ball = game.ball in
+    (* Mise à jour de la position de la balle en fonction de sa vitesse *)
+    ball.position := { 
+      dx = !(ball.position).dx + !(ball.velocity).dx; 
+      dy = !(ball.position).dy + !(ball.velocity).dy 
+    };
 
-let animate_action(game : t_camlbrick) : unit =  
-  (* Iteration 1,2,3 et 4
-    Cette fonction est appelée par l'interface graphique à chaque frame
-    du jeu vidéo.
-    Vous devez mettre tout le code qui permet de montrer l'évolution du jeu vidéo.    
-  *)
-  ()
+    (* Gestion des collisions avec les bords de l'écran *)
+    if !(ball.position).dx < 0 || !(ball.position).dx > game.params.world_width then
+      ball.velocity := { !(ball.velocity) with dx = -(!(ball.velocity).dx) };  (* Rebond sur les bords latéraux *)
+    if !(ball.position).dy < 0 then
+      ball.velocity := { !(ball.velocity) with dy = -(!(ball.velocity).dy) };  (* Rebond sur le bord supérieur *)
+  end
 ;;
+
