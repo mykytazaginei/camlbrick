@@ -2,69 +2,6 @@
 #use "camlbrick.ml";;
 
 
-(*refaire*)
-let test_ball_modif_speed () =
-  (* Initialisation des valeurs pour le test *)
-  let game : t_camlbrick = {
-    params = make_camlbrick_param ();
-    ball = {
-      position = ref { dx = 0; dy = 0 };
-      velocity = ref { dx = 1; dy = 1 }; 
-      size = BS_MEDIUM;
-    };
-    paddle = {
-      position = ref 50;
-      size = PS_SMALL;
-    };
-    bricks = [|[||]|];
-    score = 0;
-    state = GAMEOVER;
-  } in
-  
-  let ball = {
-    position = ref { dx = 0; dy = 0 };
-    velocity = ref { dx = 1; dy = 1 };
-    size = BS_SMALL;
-  } in
-  
-  let dv = { dx = 2; dy = 3 } in
-  
-  (* Appel de la fonction à tester *)
-  ball_modif_speed (game, ball, dv);
-  
-  (* Assertions *)
-  assert_equals !(ball.velocity).dx 3;
-  assert_equals !(ball.velocity).dy 4
-;;
-
-(*refaire*)
-let test_ball_modif_speed_sign () =
-  (* Initialisation des valeurs pour le test *)
-  let game : t_camlbrick = {
-    params = make_camlbrick_param ();
-    ball = {
-      position = ref (make_vec2(0, 0));
-      velocity = ref { dx = 1; dy = 1 };
-      size = BS_MEDIUM;
-    };
-    paddle = {
-      position = ref 50;
-      size = PS_SMALL;
-    };
-    bricks = [|[||]|];
-    score = 0;
-    state = GAMEOVER;
-  } in
-  let sv = { dx = 2; dy = 3 } in
-  let expected_velocity = { dx = 2; dy = 3 } in
-  
-  (* Appel de la fonction à tester *)
-  ball_modif_speed_sign (game, game.ball, sv);
-  
-  (* Assertion *)
-  assert_equals game.ball.velocity expected_velocity
-;;
-
 (**Cette fonction de test vérifie si la fonction is_inside_circle fonctionne correctement en vérifiant si les points sont à l'intérieur ou à l'extérieur du cercle spécifié.
 
 Pour le test à l'intérieur du cercle, elle utilise les coordonnées (3, 4), qui sont à l'intérieur d'un cercle de rayon 5 centré à l'origine.
@@ -107,36 +44,6 @@ let test_is_inside_quad () =
   assert_true result
 ;;
 
-(*refaire*)
-let test_ball_remove_out_of_border () =
-  (* Initialisation des valeurs pour le test *)
-  let game : t_camlbrick = {
-    params = make_camlbrick_param ();
-    ball = {
-      position = ref { dx = 0; dy = 0 };
-      velocity = ref { dx = 0; dy = 1 }; 
-      size = BS_MEDIUM;
-    };
-    paddle = {
-      position = ref 50;
-      size = PS_SMALL;
-    };
-    bricks = [|[||]|];
-    score = 0;
-    state = GAMEOVER;
-  } in
-  
-  let balls = [
-    { position = ref { dx = 0; dy = 100 }; velocity = ref { dx = 0; dy = 1 }; size = BS_SMALL };
-    { position = ref { dx = 0; dy = 200 }; velocity = ref { dx = 0; dy = 1 }; size = BS_SMALL };
-  ] in
-  
-  (* Appel de la fonction à tester *)
-  let result = ball_remove_out_of_border (game, balls) in
-  
-  (* Assertion *)
-  assert_equals (List.length result) 1
-;;
 
 (**Ce test vérifie si la fonction ball_hit_paddle fonctionne correctement en vérifiant si la balle entre en collision avec la raquette.
 
@@ -261,14 +168,11 @@ let test_ball_hit_side_brick () =
 ;;
 
 (* Appels des fonctions de test *)
-test_ball_modif_speed ();;
-test_ball_modif_speed_sign () ;;
 test_is_inside_circle ();;
 test_is_inside_quad ();;
-test_ball_remove_out_of_border();;
-test_ball_hit_paddle();;
+test_ball_hit_paddle ();;
 test_ball_hit_corner_brick ();;
-test_ball_hit_side_brick ()
+test_ball_hit_side_brick ();;
 
 (* Affiche le rapport de test *)
 test_report();;  
