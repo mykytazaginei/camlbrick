@@ -223,7 +223,7 @@ type t_camlbrick = {
   paddle : t_paddle;
   bricks : t_brick_kind array array;
   score : int;
-  state : t_gamestate;
+  mutable state : t_gamestate;
 }
 ;;
 
@@ -302,6 +302,9 @@ let make_paddle() : t_paddle =
 
 (** 
   Cette fonction permet de créer une balle par défaut au milieu de l'écran et de taille moyenne.
+  @param x la position en x de la balle
+  @param y la position en y de la balle
+  @param size la taille de la balle
   @return Renvoie une balle par défaut.  
 *)
 let make_ball(x,y, size : int * int * int) : t_ball =
@@ -339,11 +342,11 @@ let string_of_gamestate(game : t_camlbrick) : string =
        else "PAUSING"
 ;;
 
-(** [brick_get game i j] is a function that returns the type of brick at position (i, j) in the game.
-    - [game] is the game state of type [t_camlbrick].
-    - [i] is the row index of the brick.
-    - [j] is the column index of the brick.
-    @return the type of brick at position (i, j) of type [t_brick_kind]. 
+(** brick_get est une fonction qui renvoie le type de brique à la position (i, j) dans le jeu.
+    @param game est l'état du jeu de type [t_camlbrick].
+    @param i est l'indice de ligne de la brique.
+    @param j est l'indice de colonne de la brique.
+    @return le type de brique à la position (i, j) de type [t_brick_kind]. 
     @autor ZAGINEI Mykyta    
 *)
 let brick_get (game, i , j : t_camlbrick * int * int) : t_brick_kind =
@@ -589,9 +592,9 @@ let ball_modif_speed_sign(game, ball, sv : t_camlbrick * t_ball * t_vec2) : unit
 *)
 let is_inside_circle(cx, cy, rad, x, y : int * int * int * int * int) : bool =
   (* Itération 3 *)
-  let dx = x - cx in
-  let dy = y - cy in
-  let distance_squared = dx * dx + dy * dy in
+  let dx: int = x - cx in
+  let dy: int = y - cy in
+  let distance_squared:int = dx * dx + dy * dy in
   distance_squared <= rad * rad
 ;;
 
@@ -611,28 +614,122 @@ let is_inside_quad(x1,y1,x2,y2, x,y : int * int * int * int * int * int) : bool 
   x >= x1 && x <= x2 && y >= y1 && y <= y2
 ;;
 
+(**
+  Renvoie une nouvelle liste sans les balles qui dépassent la zone de rebond.
+  @param game le jeu en cours
+  @param i la ligne de la brique
+  @param j la colonne de la brique
+  @param x la position en x du point
+  @param y la position en y du point
+  @return Renvoie vrai si le point est à l'intérieur de la brique, faux sinon.
+  @autor Mykyta ZAGINEI    
+*)
+let ball_remove_out_of_border (game, balls : t_camlbrick * t_ball list ) : t_ball list =
+  let fst_ball : t_ball = List.hd balls in
 
-let ball_remove_out_of_border(game,balls : t_camlbrick * t_ball list ) : t_ball list = 
-  (* Itération 3 *)
-  balls
+  if !(fst_ball.position).dy >= game.params.world_width then
+    List.tl balls
+  else
+    balls
 ;;
 
-let ball_hit_paddle(game,ball,paddle : t_camlbrick * t_ball * t_paddle) : unit =
-  (* Itération 3 *)
-  ()
+
+(** 
+  ball_hit_paddle game ball paddle est une fonction qui vérifie si la balle est entrée en collision avec la pagaie dans
+  le jeu de Camlbrick.
+  @param game est l'état actuel du jeu.
+  @param balle est l'objet balle du jeu.
+  @param pagaie est l'objet pagaie du jeu.
+  @return La fonction renvoie [true] si la balle est entrée en collision avec la raquette, et [false] dans le cas contraire.
+  @autor ZAGINEI Mykyta
+*)
+let ball_hit_paddle(game, ball, paddle : t_camlbrick * t_ball * t_paddle) : bool =
+  let paddle_size : int = paddle_size_pixel(game) in
+  let paddle_x : int = !(paddle.position) in
+  let paddle_right : int = paddle_x + paddle_size in
+  let paddle_y : int = game.params.world_bricks_height + game.params.world_empty_height - game.params.paddle_init_height in
+  let paddle_top : int = paddle_y in
+  let paddle_bottom : int = paddle_y + game.params.paddle_init_height in
+  let ball_x : int = !(ball.position).dx in
+  let ball_y : int = !(ball.position).dy in
+  let ball_radius : int = ball_size_pixel(game, ball) in
+
+  if ball_y - ball_radius <= paddle_bottom && ball_y + ball_radius >= paddle_top then
+    if ball_x + ball_radius >= paddle_x && ball_x - ball_radius <= paddle_right then
+      true
+    else
+      false
+  else
+    false
 ;;
 
 
-(* lire l'énoncé choix à faire *)
-let ball_hit_corner_brick(game,ball, i,j : t_camlbrick * t_ball * int * int) : bool =
-  (* Itération 3 *)
-  false
+(** 
+    ball_hit_corner_brick vérifie si la balle a touché le coin d'une brique dans la grille de jeu.
+    @param game l'état actuel du jeu.
+    @param ball l'objet ball dans le jeu.
+    @param i la ligne de la brique.
+    @param j la colonne de la brique.
+    @return La fonction renvoie [true] si la balle a touché le coin de la brique, et [false] dans le cas contraire.
+    @autor ZAGINEI Mykyta
+  *)
+let ball_hit_corner_brick (game, ball, i, j : t_camlbrick * t_ball * int * int) : bool =
+  let brick_x : int = j * game.params.brick_width in
+  let brick_y : int = i * game.params.brick_height in
+  let corners : (int * int) array  = [|
+    (brick_x, brick_y);  (* Coin supérieur gauche *)
+    (brick_x + game.params.brick_width, brick_y);  (* Coin supérieur droit *)
+    (brick_x, brick_y + game.params.brick_height);  (* Coin inférieur gauche *)
+    (brick_x + game.params.brick_width, brick_y + game.params.brick_height)  (* Coin inférieur droit *)
+  |] in
+  let ball_x : int = !(ball.position).dx in
+  let ball_y : int = !(ball.position).dy in
+  let ball_radius : int  = ball_size_pixel(game, ball) in
+  let collision : bool ref = ref false in
+  for k = 0 to Array.length corners - 1 do
+    let (cx, cy) = corners.(k) in
+    let diff_x : int = abs (ball_x - cx) in
+    let diff_y : int = abs (ball_y - cy) in
+    if diff_x <= ball_radius && diff_y <= ball_radius then
+      collision := true;
+  done;
+  !collision
 ;;
 
-(* lire l'énoncé choix à faire *)
-let ball_hit_side_brick(game,ball, i,j : t_camlbrick * t_ball * int * int) : bool =
+(**
+  Cette fonction permet de vérifier si la balle a touché le côté d'une brique.
+  @param game le jeu en cours
+  @param ball la balle
+  @param i la ligne de la brique
+  @param j la colonne de la brique
+  @return Renvoie vrai si la balle a touché le côté de la brique, faux sinon.
+  @autor Mykyta ZAGINEI
+  *)
+let ball_hit_side_brick(game, ball, i, j: t_camlbrick * t_ball * int * int) : bool =
   (* Itération 3 *)
-  false
+  let brick_x : int = j * game.params.brick_width in
+  let brick_y : int = i * game.params.brick_height in
+  let brick_center_x : int  = brick_x + game.params.brick_width / 2 in
+  let brick_center_y : int = brick_y + game.params.brick_height / 2 in
+  let side_points : (int * int) array= [|
+    (brick_x, brick_center_y);  (* Milieu du côté gauche *)
+    (brick_x + game.params.brick_width, brick_center_y);  (* Milieu du côté droit *)
+    (brick_center_x, brick_y);  (* Milieu du côté supérieur *)
+    (brick_center_x, brick_y + game.params.brick_height)  (* Milieu du côté inférieur *)
+  |] in
+  let ball_x : int = !(ball.position).dx in
+  let ball_y : int = !(ball.position).dy in
+  let ball_radius : int= ball_size_pixel(game, ball) in
+
+  let collision : bool ref= ref false in
+  for k = 0 to Array.length side_points - 1 do
+    let (px, py) = side_points.(k) in
+    let diff_x = abs (ball_x - px) in
+    let diff_y = abs (ball_y - py) in
+    if diff_x <= ball_radius && diff_y <= ball_radius then
+      collision := true;
+  done;
+  !collision
 ;;
 
 let game_test_hit_balls(game, balls : t_camlbrick * t_ball list) : unit =
@@ -704,6 +801,18 @@ let canvas_keypressed(game, keyString, keyCode : t_camlbrick * string * int) : u
   print_string(" code=");
   print_int(keyCode);
   print_newline()
+  let left_key_code : int = 65361 in
+  let q_key_code : int = 113 in
+  let right_key_code : int = 65363 in
+  let d_right_code : int = 100 in
+
+  if key_code = left_key_code || key_code = q_key_code then
+    paddle_move_left game
+  else if key_code = right_key_code || key_code = d_right_code then
+    paddle_move_right game
+  else
+    ()
+;;
 ;;
 
 (**
