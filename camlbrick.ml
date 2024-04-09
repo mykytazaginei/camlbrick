@@ -204,7 +204,7 @@ let vec2_mult_scalar(a,x,y : t_vec2 * int * int) : t_vec2 =
   (** Itération 2 
      @autor Hau NGUYEN *)
   type t_paddle = {
-    position : int ref ;
+    position :(int ref) * int ;
     size : t_paddle_size;
   }
   ;;
@@ -222,8 +222,8 @@ type t_camlbrick = {
   ball : t_ball;
   paddle : t_paddle;
   bricks : t_brick_kind array array;
-  score : int;
-  mutable state : t_gamestate;
+  state : t_gamestate;
+  speed : int ref
 }
 ;;
 
@@ -268,22 +268,20 @@ let param_get(game : t_camlbrick) : t_camlbrick_param =
     @autor Hau NGUYEN
 *)
 let make_camlbrick() : t_camlbrick = 
-  let ball_position = ref (make_vec2(0, 0)) in
-  let paddle_position = ref 0 in
   {
     params = make_camlbrick_param ();
     ball = {
-      position = ball_position;
+      position = ref (make_vec2(0, 0));
       velocity = ref(make_vec2(0, 0)); 
       size = BS_MEDIUM;
     };
     paddle = {
-      position = paddle_position;
-      size = PS_SMALL;
+      position = (ref 0, 0);
+      size = PS_MEDIUM;
     };
-    bricks = [|[||]|];
-    score = 0;
-    state = GAMEOVER;
+    bricks = Array.make_matrix 20 30 BK_empty;
+    state = PLAYING;
+    speed = ref 5
   }
 ;;
 
@@ -295,7 +293,7 @@ let make_camlbrick() : t_camlbrick =
 let make_paddle() : t_paddle =
   (* Itération 2 *)
   {
-    position = ref 400;
+    position = (ref 0, 0);
     size = PS_MEDIUM;
   }
 ;;
@@ -316,7 +314,7 @@ let make_ball(x,y, size : int * int * int) : t_ball =
     else BS_MEDIUM (* Par défaut, taille moyenne *)
     in
     {
-      position = ref {dx = x; dy = y};
+      position = ref(make_vec2 (x, y));
       velocity = ref(make_vec2(10, 10));
       size = ball_size;
     }
@@ -407,7 +405,7 @@ let brick_color(game,i,j : t_camlbrick * int * int) : t_camlbrick_color =
 *)
 let paddle_x(game : t_camlbrick) : int = 
   (* Itération 2 *)
-  !(game.paddle.position)
+  !(fst game.paddle.position)
 ;;
 
 (**
@@ -418,11 +416,13 @@ let paddle_x(game : t_camlbrick) : int =
 *)
 let paddle_size_pixel(game : t_camlbrick) : int = 
   (* Itération 2 *)
-  if game.paddle.size = PS_SMALL 
-    then 60
-  else if game.paddle.size = PS_MEDIUM 
-    then 80
-  else 100 
+  let parametrs : t_camlbrick_param = param_get game in
+  if game.paddle.size = PS_SMALL then
+    parametrs.paddle_init_width
+  else if game.paddle.size = PS_MEDIUM then
+    parametrs.paddle_init_width * 2
+  else 
+    parametrs.paddle_init_width * 3
 ;;
 
 (**
@@ -434,8 +434,8 @@ let paddle_size_pixel(game : t_camlbrick) : int =
 *)
 let paddle_move_left(game : t_camlbrick) : unit = 
   (* Itération 2 *)
-  if !(game.paddle.position) > 0 
-    then game.paddle.position := !(game.paddle.position) - 20
+  if !(fst game.paddle.position) > 0 
+    then fst game.paddle.position := !(fst game.paddle.position) - 20
 ;;
 
 (**
@@ -447,8 +447,8 @@ let paddle_move_left(game : t_camlbrick) : unit =
 *)
 let paddle_move_right(game : t_camlbrick) : unit = 
   (* Itération 2 *)
-  if !(game.paddle.position) + paddle_size_pixel(game) < game.params.world_width
-    then game.paddle.position := !(game.paddle.position) + 20
+  if !(fst game.paddle.position) + paddle_size_pixel(game) < game.params.world_width
+    then fst game.paddle.position := !(fst game.paddle.position) + 20
 ;;
 
 (**
@@ -495,11 +495,8 @@ let balls_get(game : t_camlbrick) : t_ball list =
 *)
 let ball_get(game, i : t_camlbrick * int) : t_ball =
   (* Itération 2 *)
-  let balls = Array.of_list (balls_get(game)) in
-  if i < 0 || i >= Array.length balls then
-     failwith "Invalid ball index"
-  else
-    balls.(i)
+  let balls : t_ball list = (balls_get(game)) in
+  List.nth balls i
 ;;
 
 (**
@@ -645,7 +642,7 @@ let ball_remove_out_of_border (game, balls : t_camlbrick * t_ball list ) : t_bal
 *)
 let ball_hit_paddle(game, ball, paddle : t_camlbrick * t_ball * t_paddle) : bool =
   let paddle_size : int = paddle_size_pixel(game) in
-  let paddle_x : int = !(paddle.position) in
+  let paddle_x : int = !(fst paddle.position) in
   let paddle_right : int = paddle_x + paddle_size in
   let paddle_y : int = game.params.world_bricks_height + game.params.world_empty_height - game.params.paddle_init_height in
   let paddle_top : int = paddle_y in
@@ -800,19 +797,18 @@ let canvas_keypressed(game, keyString, keyCode : t_camlbrick * string * int) : u
   print_string(keyString);
   print_string(" code=");
   print_int(keyCode);
-  print_newline()
+  print_newline();
   let left_key_code : int = 65361 in
   let q_key_code : int = 113 in
   let right_key_code : int = 65363 in
   let d_right_code : int = 100 in
 
-  if key_code = left_key_code || key_code = q_key_code then
+  if keyCode = left_key_code || keyCode = q_key_code then
     paddle_move_left game
-  else if key_code = right_key_code || key_code = d_right_code then
+  else if keyCode = right_key_code || keyCode = d_right_code then
     paddle_move_right game
   else
     ()
-;;
 ;;
 
 (**
@@ -865,9 +861,14 @@ let custom2_text() : string =
   Vous pouvez réaliser des traitements spécifiques, mais comprenez bien que cela aura
   un impact sur les performances si vous dosez mal les temps de calcul.
   @param game la partie en cours.
+  @autor Alexandre SARDIN
 *)
-let start_onclick(game : t_camlbrick) : unit=
-  ()
+let start_onclick(game : t_camlbrick) : unit =
+  if game.state = PAUSING then
+    let games : t_camlbrick = { game with state = PLAYING } in
+    ()
+  else
+    failwith "the game is not pausing"
 ;;
 
 (**
@@ -878,9 +879,14 @@ let start_onclick(game : t_camlbrick) : unit=
   Vous pouvez réaliser des traitements spécifiques, mais comprenez bien que cela aura
   un impact sur les performances si vous dosez mal les temps de calcul.
   @param game la partie en cours.
+  @autor Alexandre SARDIN
 *)
 let stop_onclick(game : t_camlbrick) : unit =
-  ()
+  if game.state = PLAYING then
+    let games : t_camlbrick = { game with state = PAUSING } in
+    ()
+  else
+    failwith "the game is not playing"
 ;;
 
 (**
@@ -891,7 +897,7 @@ let stop_onclick(game : t_camlbrick) : unit =
   d'interagir avec le joueur.
 *)
 let speed_get(game : t_camlbrick) : int = 
-  0
+  !(game.speed)
 ;;
 
 
@@ -903,6 +909,7 @@ let speed_get(game : t_camlbrick) : int =
 *)
 let speed_change(game,xspeed : t_camlbrick * int) : unit=
   print_endline("Change speed : "^(string_of_int xspeed));
+  game.speed := xspeed
 ;;
 
 
