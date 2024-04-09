@@ -619,7 +619,7 @@ let is_inside_quad(x1,y1,x2,y2, x,y : int * int * int * int * int * int) : bool 
   @param x la position en x du point
   @param y la position en y du point
   @return Renvoie vrai si le point est à l'intérieur de la brique, faux sinon.
-  @autor Mykyta ZAGINEI    
+  @autor Hlib TOTSKYI   
 *)
 let ball_remove_out_of_border (game, balls : t_camlbrick * t_ball list ) : t_ball list =
   let fst_ball : t_ball = List.hd balls in
@@ -669,6 +669,7 @@ let ball_hit_paddle(game, ball, paddle : t_camlbrick * t_ball * t_paddle) : bool
     @param j la colonne de la brique.
     @return La fonction renvoie [true] si la balle a touché le coin de la brique, et [false] dans le cas contraire.
     @autor ZAGINEI Mykyta
+    @autor Alexandre SARDIN
   *)
 let ball_hit_corner_brick (game, ball, i, j : t_camlbrick * t_ball * int * int) : bool =
   let brick_x : int = j * game.params.brick_width in
@@ -701,6 +702,7 @@ let ball_hit_corner_brick (game, ball, i, j : t_camlbrick * t_ball * int * int) 
   @param j la colonne de la brique
   @return Renvoie vrai si la balle a touché le côté de la brique, faux sinon.
   @autor Mykyta ZAGINEI
+  @autor Alexandre SARDIN
   *)
 let ball_hit_side_brick(game, ball, i, j: t_camlbrick * t_ball * int * int) : bool =
   (* Itération 3 *)
@@ -790,7 +792,8 @@ let canvas_mouse_click_release(game,button,x,y : t_camlbrick * int * int * int) 
   un impact sur les performances si vous dosez mal les temps de calcul.
   @param game la partie en cours.
   @param keyString nom de la touche appuyée.
-  @param keyCode code entier de la touche appuyée.   
+  @param keyCode code entier de la touche appuyée. 
+  @autor Totskyi Hlib  
 *)
 let canvas_keypressed(game, keyString, keyCode : t_camlbrick * string * int) : unit =
   print_string("Key pressed: ");
@@ -895,6 +898,9 @@ let stop_onclick(game : t_camlbrick) : unit =
 
   Vous pouvez donc renvoyer une valeur selon votre désir afin d'offrir la possibilité
   d'interagir avec le joueur.
+  @param game la partie en cours.
+  @return Renvoie la valeur du slider Speed.
+  @autor Hlib TOTSKYI
 *)
 let speed_get(game : t_camlbrick) : int = 
   !(game.speed)
@@ -906,13 +912,25 @@ let speed_get(game : t_camlbrick) : int =
   slide Speed dans la zone de menu a été modifiée. 
   
   Ainsi, vous pourrez réagir selon le joueur.
+  @param game la partie en cours.
+  @param xspeed la nouvelle valeur du slider Speed.
+  @autor Hlib TOTSKYI
 *)
 let speed_change(game,xspeed : t_camlbrick * int) : unit=
   print_endline("Change speed : "^(string_of_int xspeed));
   game.speed := xspeed
 ;;
 
+(**
+  Cette fonction est appelée par l'interface graphique lorsqu'on clique sur le bouton
+  de la zone de menu et que ce bouton affiche "Reset".
 
+  
+  Vous pouvez réaliser des traitements spécifiques, mais comprenez bien que cela aura
+  un impact sur les performances si vous dosez mal les temps de calcul.
+  @param game la partie en cours.
+  @autor Hlib TOTSKYI    
+*)
 let animate_action(game : t_camlbrick) : unit =
   if game.state = PLAYING then begin
     let ball = game.ball in
