@@ -1,4 +1,4 @@
-(* #directory "+labltk";;
+(*#directory "+labltk";;
 #load "labltk.cma";;
 
 #mod_use "camlbrick.ml";; *)
