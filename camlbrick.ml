@@ -434,7 +434,7 @@ let paddle_size_pixel(game : t_camlbrick) : int =
 *)
 let paddle_move_left(game : t_camlbrick) : unit = 
   (* Itération 2 *)
-  if !(fst game.paddle.position) > 0 
+  if !(fst game.paddle.position) > -345
     then fst game.paddle.position := !(fst game.paddle.position) - 20
 ;;
 
@@ -447,7 +447,7 @@ let paddle_move_left(game : t_camlbrick) : unit =
 *)
 let paddle_move_right(game : t_camlbrick) : unit = 
   (* Itération 2 *)
-  if !(fst game.paddle.position) + paddle_size_pixel(game) < game.params.world_width
+  if !(fst game.paddle.position) + paddle_size_pixel(game) < 545
     then fst game.paddle.position := !(fst game.paddle.position) + 20
 ;;
 
@@ -801,14 +801,13 @@ let canvas_keypressed(game, keyString, keyCode : t_camlbrick * string * int) : u
   print_string(" code=");
   print_int(keyCode);
   print_newline();
-  let left_key_code : int = 65361 in
-  let q_key_code : int = 113 in
-  let right_key_code : int = 65363 in
-  let d_right_code : int = 100 in
-
-  if keyCode = left_key_code || keyCode = q_key_code then
+  let left_code : int = 65361 in
+  let q_code : int = 113 in
+  let right_code : int = 65363 in
+  let d_code : int = 100 in
+  if keyCode = left_code || keyCode = q_code then
     paddle_move_left game
-  else if keyCode = right_key_code || keyCode = d_right_code then
+  else if keyCode = right_code || keyCode = d_code then
     paddle_move_right game
   else
     ()
