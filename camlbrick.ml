@@ -112,7 +112,7 @@ type t_gamestate = GAMEOVER | PLAYING | PAUSING;;
   @param y seconde composante du vecteur
   @return Renvoie le vecteur dont les composantes sont (x,y).
   @deprecated Cette fonction est utilisée en interne.
-  @autor ZAGINEI Mykyta
+  @autor Mykyta ZAGINEI 
   *)
 (* Itération 1 *)
 type t_vec2 = {dx : int ; dy : int};;
@@ -126,7 +126,7 @@ type t_vec2 = {dx : int ; dy : int};;
   @param x première composante du vecteur
   @param y seconde composante du vecteur
   @return Renvoie le vecteur dont les composantes sont (x,y).
-  @author Zaginei Mykyta
+  @author Mykyta ZAGINEI
 *)
 let make_vec2(x,y : int * int) : t_vec2 = 
   {dx = x ; dy = y}
@@ -152,7 +152,7 @@ let vec2_add(a,b : t_vec2 * t_vec2) : t_vec2 =
   @param x composante en x du second vecteur
   @param y composante en y du second vecteur
   @return Renvoie un vecteur qui est la résultante du vecteur 
-  @author Zaginei Mykyta
+  @author Mykyta ZAGINEI
 *)
 let vec2_add_scalar(a,x,y : t_vec2 * int * int) : t_vec2 =
    {dx = a.dx + x; dy = a.dy + y}
@@ -170,7 +170,7 @@ let vec2_add_scalar(a,x,y : t_vec2 * int * int) : t_vec2 =
   @param a premier vecteur
   @param b second vecteur
   @return Renvoie un vecteur qui résulte de la multiplication des composantes. 
-  @author Zaginei Mykyta
+  @author Mykyta ZAGINEI
 *)
 let vec2_mult(a,b : t_vec2 * t_vec2) : t_vec2 = 
   {dx = a.dx * b.dx; dy = a.dy * b.dy}
@@ -184,13 +184,18 @@ let vec2_mult_scalar(a,x,y : t_vec2 * int * int) : t_vec2 =
   vec2_mult(a, make_vec2(x,y))
 ;;
   ]}
-    @author Zaginei Mykyta
+  @param a premier vecteur
+  @param x composante en x du second vecteur
+  @param y composante en y du second vecteur
+  @return Renvoie un vecteur qui résulte de la multiplication des composantes.
+  @author Mykyta ZAGINEI
 *)
 let vec2_mult_scalar(a,x,y : t_vec2 * int * int) : t_vec2 =
   {dx = a.dx * x; dy = a.dy * y}
 ;;
 
-(** Itération 2 
+(** 
+  Type pour ball
   @author Hau NGUYEN
   @autor ZAGINEI Mykyta
   *)
@@ -201,8 +206,10 @@ let vec2_mult_scalar(a,x,y : t_vec2 * int * int) : t_vec2 =
   }
   ;;
   
-  (** Itération 2 
-     @autor Hau NGUYEN *)
+(** 
+  Type pour paddle
+  @autor Hau NGUYEN 
+*)
   type t_paddle = {
     position :(int ref) * int ;
     size : t_paddle_size;
@@ -216,7 +223,6 @@ let vec2_mult_scalar(a,x,y : t_vec2 * int * int) : t_vec2 =
   @deprecated Cette structure est utilisée en interne.
   @autor Hau NGUYEN    
 *)
-(* Itération 1, 2, 3 et 4 *)
 type t_camlbrick = {
   params : t_camlbrick_param;
   ball : t_ball;
@@ -288,7 +294,7 @@ let make_camlbrick() : t_camlbrick =
 (**
   Cette fonction crée une raquette par défaut au milieu de l'écran et de taille normal.  
   @deprecated Cette fonction est là juste pour le debug ou pour débuter certains traitements de test.
-  @author HAU NGUYEN
+  @author Hau NGUYEN
 *)
 let make_paddle() : t_paddle =
   (* Itération 2 *)
@@ -304,6 +310,7 @@ let make_paddle() : t_paddle =
   @param y la position en y de la balle
   @param size la taille de la balle
   @return Renvoie une balle par défaut.  
+  @autor Hau NGUYEN
 *)
 let make_ball(x,y, size : int * int * int) : t_ball =
   (* Itération 3 *)
@@ -311,7 +318,7 @@ let make_ball(x,y, size : int * int * int) : t_ball =
     if size = 1 then BS_SMALL
     else if size = 2 then BS_MEDIUM
     else if size = 3 then BS_BIG
-    else BS_MEDIUM (* Par défaut, taille moyenne *)
+    else BS_MEDIUM 
     in
     {
       position = ref(make_vec2 (x, y));
@@ -330,7 +337,6 @@ let make_ball(x,y, size : int * int * int) : t_ball =
   @return Renvoie la chaîne de caractère représentant l'état du jeu.
   @author Hau NGUYEN
 *)
-
 let string_of_gamestate(game : t_camlbrick) : string =
   (* Itération 1,2,3 et 4 *)
   if game.state = GAMEOVER 
@@ -345,7 +351,7 @@ let string_of_gamestate(game : t_camlbrick) : string =
     @param i est l'indice de ligne de la brique.
     @param j est l'indice de colonne de la brique.
     @return le type de brique à la position (i, j) de type [t_brick_kind]. 
-    @autor ZAGINEI Mykyta    
+    @autor Mykyta ZAGINEI    
 *)
 let brick_get (game, i , j : t_camlbrick * int * int) : t_brick_kind =
     game.bricks.(i).(j)
@@ -430,7 +436,7 @@ let paddle_size_pixel(game : t_camlbrick) : int =
   @param game le jeu en cours
   @return Renvoie la position en y de la raquette.
   @autor Sardin Alexandre
-  @autor Zaginei Mykyta
+  @autor Mykyta ZAGINEI
 *)
 let paddle_move_left(game : t_camlbrick) : unit = 
   (* Itération 2 *)
@@ -443,7 +449,7 @@ let paddle_move_left(game : t_camlbrick) : unit =
   @param game le jeu en cours 
   @return Renvoie la position en y de la raquette.
   @autor Sardin Alexandre
-  @autor Zaginei Mykyta
+  @autor Mykyta ZAGINEI
 *)
 let paddle_move_right(game : t_camlbrick) : unit = 
   (* Itération 2 *)
@@ -491,7 +497,7 @@ let balls_get(game : t_camlbrick) : t_ball list =
   @param game le jeu en cours
   @param i l'index de la balle
   @return Renvoie la balle correspondante à l'index.
-  @autor ZAGINEI Mykyta
+  @autor Mykyta ZAGINEI
 *)
 let ball_get(game, i : t_camlbrick * int) : t_ball =
   (* Itération 2 *)
@@ -638,7 +644,7 @@ let ball_remove_out_of_border (game, balls : t_camlbrick * t_ball list ) : t_bal
   @param balle est l'objet balle du jeu.
   @param pagaie est l'objet pagaie du jeu.
   @return La fonction renvoie [true] si la balle est entrée en collision avec la raquette, et [false] dans le cas contraire.
-  @autor ZAGINEI Mykyta
+  @autor Mykyta ZAGINEI 
 *)
 let ball_hit_paddle(game, ball, paddle : t_camlbrick * t_ball * t_paddle) : bool =
   let paddle_size : int = paddle_size_pixel(game) in
@@ -668,7 +674,7 @@ let ball_hit_paddle(game, ball, paddle : t_camlbrick * t_ball * t_paddle) : bool
     @param i la ligne de la brique.
     @param j la colonne de la brique.
     @return La fonction renvoie [true] si la balle a touché le coin de la brique, et [false] dans le cas contraire.
-    @autor ZAGINEI Mykyta
+    @autor Mykyta ZAGINEI 
     @autor Alexandre SARDIN
   *)
 let ball_hit_corner_brick (game, ball, i, j : t_camlbrick * t_ball * int * int) : bool =
