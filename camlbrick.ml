@@ -112,7 +112,7 @@ type t_gamestate = GAMEOVER | PLAYING | PAUSING;;
   @param y seconde composante du vecteur
   @return Renvoie le vecteur dont les composantes sont (x,y).
   @deprecated Cette fonction est utilisée en interne.
-  @autor Mykyta ZAGINEI 
+  @author Mykyta ZAGINEI 
   *)
 (* Itération 1 *)
 type t_vec2 = {dx : int ; dy : int};;
@@ -197,7 +197,7 @@ let vec2_mult_scalar(a,x,y : t_vec2 * int * int) : t_vec2 =
 (** 
   Type pour ball
   @author Hau NGUYEN
-  @autor ZAGINEI Mykyta
+  @author ZAGINEI Mykyta
   *)
   type t_ball = {
     position : t_vec2 ref;
@@ -208,7 +208,7 @@ let vec2_mult_scalar(a,x,y : t_vec2 * int * int) : t_vec2 =
   
 (** 
   Type pour paddle
-  @autor Hau NGUYEN 
+  @author Hau NGUYEN 
 *)
   type t_paddle = {
     position :(int ref) * int ;
@@ -221,7 +221,7 @@ let vec2_mult_scalar(a,x,y : t_vec2 * int * int) : t_vec2 =
   Elle contient l'ensemble des informations nécessaires pour représenter le jeu.
   Vous devez modifier cette structure pour ajouter les informations nécessaires pour représenter le jeu.
   @deprecated Cette structure est utilisée en interne.
-  @autor Hau NGUYEN    
+  @author Hau NGUYEN    
 *)
 type t_camlbrick = {
   params : t_camlbrick_param;
@@ -259,7 +259,7 @@ let make_camlbrick_param() : t_camlbrick_param = {
   Cette fonction extrait le paramétrage d'un jeu à partir du jeu donné en argument.
   @param game jeu en cours d'exécution.
   @return Renvoie le paramétrage actuel.
-  @autor Hau NGUYEN
+  @author Hau NGUYEN
   *)
 let param_get(game : t_camlbrick) : t_camlbrick_param =
   (* Itération 1 *)
@@ -270,8 +270,8 @@ let param_get(game : t_camlbrick) : t_camlbrick_param =
     Elle initialise les paramètres du jeu, la balle, la raquette, les briques, le score et l'état.
 
     @return A new instance of the game state for CamlBrick.
-    @autor Mykyta ZAGINEI
-    @autor Hau NGUYEN
+    @author Mykyta ZAGINEI
+    @author Hau NGUYEN
 *)
 let make_camlbrick() : t_camlbrick = 
   {
@@ -310,7 +310,7 @@ let make_paddle() : t_paddle =
   @param y la position en y de la balle
   @param size la taille de la balle
   @return Renvoie une balle par défaut.  
-  @autor Hau NGUYEN
+  @author Hau NGUYEN
 *)
 let make_ball(x,y, size : int * int * int) : t_ball =
   (* Itération 3 *)
@@ -351,7 +351,7 @@ let string_of_gamestate(game : t_camlbrick) : string =
     @param i est l'indice de ligne de la brique.
     @param j est l'indice de colonne de la brique.
     @return le type de brique à la position (i, j) de type [t_brick_kind]. 
-    @autor Mykyta ZAGINEI    
+    @author Mykyta ZAGINEI    
 *)
 let brick_get (game, i , j : t_camlbrick * int * int) : t_brick_kind =
     game.bricks.(i).(j)
@@ -364,7 +364,7 @@ let brick_get (game, i , j : t_camlbrick * int * int) : t_brick_kind =
   @param i la ligne de la brique
   @param j la colonne de la brique
   @return Renvoie le type de brique après le choc.
-  @autor Totskyi Hlib
+  @author Totskyi Hlib
 *)
 let brick_hit(game, i, j : t_camlbrick * int * int)  : t_brick_kind = 
   (* Itération 1 *)
@@ -386,7 +386,7 @@ let brick_hit(game, i, j : t_camlbrick * int * int)  : t_brick_kind =
   @param i la ligne de la brique
   @param j la colonne de la brique
   @return Renvoie la couleur de la brique.
-  @autor Totskyi Hlib   
+  @author Totskyi Hlib   
 *)
 let brick_color(game,i,j : t_camlbrick * int * int) : t_camlbrick_color = 
   (* Itération 1 *)
@@ -407,7 +407,7 @@ let brick_color(game,i,j : t_camlbrick * int * int) : t_camlbrick_color =
   Cette function renvoie la position gauche du rectangle symbolisant la raquette.  
   @param game le jeu en cours
   @return Renvoie la position gauche de la raquette.
-  @autor Hau NGUYEN
+  @author Hau NGUYEN
 *)
 let paddle_x(game : t_camlbrick) : int = 
   (* Itération 2 *)
@@ -418,7 +418,7 @@ let paddle_x(game : t_camlbrick) : int =
   Cette function renvoie la largeur en pixel du rectangle. 
   @param game le jeu en cours
   @return Renvoie la largeur en pixel de la raquette.
-  @autor Hau NGUYEN   
+  @author Hau NGUYEN   
 *)
 let paddle_size_pixel(game : t_camlbrick) : int = 
   (* Itération 2 *)
@@ -435,8 +435,8 @@ let paddle_size_pixel(game : t_camlbrick) : int =
   Cette fonction permet de deplacer la position en gauche de la raquette.
   @param game le jeu en cours
   @return Renvoie la position en y de la raquette.
-  @autor Sardin Alexandre
-  @autor Mykyta ZAGINEI
+  @author Sardin Alexandre
+  @author Mykyta ZAGINEI
 *)
 let paddle_move_left(game : t_camlbrick) : unit = 
   (* Itération 2 *)
@@ -448,8 +448,8 @@ let paddle_move_left(game : t_camlbrick) : unit =
   Cette fonction permet de deplacer la position en droit de la raquette.
   @param game le jeu en cours 
   @return Renvoie la position en y de la raquette.
-  @autor Sardin Alexandre
-  @autor Mykyta ZAGINEI
+  @author Sardin Alexandre
+  @author Mykyta ZAGINEI
 *)
 let paddle_move_right(game : t_camlbrick) : unit = 
   (* Itération 2 *)
@@ -461,7 +461,7 @@ let paddle_move_right(game : t_camlbrick) : unit =
   Cette fonction permet de récupérer la position en x de la balle.
   @param game le jeu en cours
   @return Renvoie la position en x de la balle.
-  @autor Hau NGUYEN
+  @author Hau NGUYEN
 *)
 let has_ball(game : t_camlbrick) : bool =
   (* Itération 2 *)
@@ -472,7 +472,7 @@ let has_ball(game : t_camlbrick) : bool =
   Cette fonction permet de récupérer le nombre de balles dans le jeu.
   @param game le jeu en cours
   @return Renvoie le nombre de balles.
-  @autor Hau NGUYEN    
+  @author Hau NGUYEN    
 *)
 let balls_count(game : t_camlbrick) : int =
   (* Itération 2 *)
@@ -485,7 +485,7 @@ let balls_count(game : t_camlbrick) : int =
   Cette fonction permet de récupérer la liste des balles du jeu.
   @param game le jeu en cours
   @return Renvoie la liste des balles.
-  @autor Hau NGUYEN
+  @author Hau NGUYEN
 *)
 let balls_get(game : t_camlbrick) : t_ball list = 
   (* Itération 2 *)
@@ -497,7 +497,7 @@ let balls_get(game : t_camlbrick) : t_ball list =
   @param game le jeu en cours
   @param i l'index de la balle
   @return Renvoie la balle correspondante à l'index.
-  @autor Mykyta ZAGINEI
+  @author Mykyta ZAGINEI
 *)
 let ball_get(game, i : t_camlbrick * int) : t_ball =
   (* Itération 2 *)
@@ -510,7 +510,7 @@ let ball_get(game, i : t_camlbrick * int) : t_ball =
   @param game le jeu en cours
   @param ball la balle
   @return Renvoie la position en x de la balle.
-  @autor Hau NGUYEN
+  @author Hau NGUYEN
 *)
 let ball_x(game, ball : t_camlbrick * t_ball) : int  =
   (* Itération 2 *)
@@ -522,7 +522,7 @@ let ball_x(game, ball : t_camlbrick * t_ball) : int  =
   @param game le jeu en cours
   @param ball la balle
   @return Renvoie la position en y de la balle.
-  @autor Hau NGUYEN
+  @author Hau NGUYEN
 *)
 let ball_y(game, ball : t_camlbrick * t_ball) : int =
   (* Itération 2 *)
@@ -534,7 +534,7 @@ let ball_y(game, ball : t_camlbrick * t_ball) : int =
   @param game le jeu en cours
   @param ball la balle
   @return Renvoie la taille en pixel de la balle.
-  @autor Hau NGUYEN
+  @author Hau NGUYEN
 *)
 let ball_size_pixel(game, ball : t_camlbrick * t_ball) : int =
   (* Itération 2 *)
@@ -552,7 +552,7 @@ let ball_size_pixel(game, ball : t_camlbrick * t_ball) : int =
   @param game le jeu en cours
   @param ball la balle
   @return Renvoie la couleur de la balle.
-  @autor Hau NGUYEN
+  @author Hau NGUYEN
 *)
 let ball_color(game, ball : t_camlbrick * t_ball) : t_camlbrick_color =
   (* Itération 2 *)
@@ -568,7 +568,7 @@ let ball_color(game, ball : t_camlbrick * t_ball) : t_camlbrick_color =
   @param game le jeu en cours
   @param ball la balle
   @return Renvoie la vitesse en x de la balle.
-  @autor Mykyta ZAGINEI    
+  @author Mykyta ZAGINEI    
 *)
 let ball_modif_speed (game, ball, dv : t_camlbrick * t_ball * t_vec2) : unit =
   ball.velocity := vec2_add (!(ball.velocity), dv)
@@ -580,7 +580,7 @@ let ball_modif_speed (game, ball, dv : t_camlbrick * t_ball * t_vec2) : unit =
   @param game le jeu en cours
   @param ball la balle
   @return Renvoie la vitesse en x de la balle.
-  @autor Mykyta ZAGINEI     
+  @author Mykyta ZAGINEI     
 *)
 let ball_modif_speed_sign(game, ball, sv : t_camlbrick * t_ball * t_vec2) : unit =
   ball.velocity := vec2_mult (!(ball.velocity), sv)
@@ -591,7 +591,7 @@ let ball_modif_speed_sign(game, ball, sv : t_camlbrick * t_ball * t_vec2) : unit
   @param game le jeu en cours
   @param ball la balle
   @return Renvoie la balle après le déplacement.
-  @autor Hlib TOTSKYI
+  @author Hlib TOTSKYI
 *)
 let is_inside_circle(cx, cy, rad, x, y : int * int * int * int * int) : bool =
   (* Itération 3 *)
@@ -610,7 +610,7 @@ let is_inside_circle(cx, cy, rad, x, y : int * int * int * int * int) : bool =
   @param x la position en x du point
   @param y la position en y du point
   @return Renvoie vrai si le point est à l'intérieur du rectangle, faux sinon.
-  @autor Mykyta ZAGINEI   
+  @author Mykyta ZAGINEI   
 *)
 let is_inside_quad(x1,y1,x2,y2, x,y : int * int * int * int * int * int) : bool =
   (* Itération 3 *)
@@ -625,7 +625,7 @@ let is_inside_quad(x1,y1,x2,y2, x,y : int * int * int * int * int * int) : bool 
   @param x la position en x du point
   @param y la position en y du point
   @return Renvoie vrai si le point est à l'intérieur de la brique, faux sinon.
-  @autor Hlib TOTSKYI   
+  @author Hlib TOTSKYI   
 *)
 let ball_remove_out_of_border (game, balls : t_camlbrick * t_ball list ) : t_ball list =
   let fst_ball : t_ball = List.hd balls in
@@ -644,7 +644,7 @@ let ball_remove_out_of_border (game, balls : t_camlbrick * t_ball list ) : t_bal
   @param balle est l'objet balle du jeu.
   @param pagaie est l'objet pagaie du jeu.
   @return La fonction renvoie [true] si la balle est entrée en collision avec la raquette, et [false] dans le cas contraire.
-  @autor Mykyta ZAGINEI 
+  @author Mykyta ZAGINEI 
 *)
 let ball_hit_paddle(game, ball, paddle : t_camlbrick * t_ball * t_paddle) : bool =
   let paddle_size : int = paddle_size_pixel(game) in
@@ -674,8 +674,8 @@ let ball_hit_paddle(game, ball, paddle : t_camlbrick * t_ball * t_paddle) : bool
     @param i la ligne de la brique.
     @param j la colonne de la brique.
     @return La fonction renvoie [true] si la balle a touché le coin de la brique, et [false] dans le cas contraire.
-    @autor Mykyta ZAGINEI 
-    @autor Alexandre SARDIN
+    @author Mykyta ZAGINEI 
+    @author Alexandre SARDIN
   *)
 let ball_hit_corner_brick (game, ball, i, j : t_camlbrick * t_ball * int * int) : bool =
   let brick_x : int = j * game.params.brick_width in
@@ -707,8 +707,8 @@ let ball_hit_corner_brick (game, ball, i, j : t_camlbrick * t_ball * int * int) 
   @param i la ligne de la brique
   @param j la colonne de la brique
   @return Renvoie vrai si la balle a touché le côté de la brique, faux sinon.
-  @autor Mykyta ZAGINEI
-  @autor Alexandre SARDIN
+  @author Mykyta ZAGINEI
+  @author Alexandre SARDIN
   *)
 let ball_hit_side_brick(game, ball, i, j: t_camlbrick * t_ball * int * int) : bool =
   (* Itération 3 *)
@@ -799,7 +799,7 @@ let canvas_mouse_click_release(game,button,x,y : t_camlbrick * int * int * int) 
   @param game la partie en cours.
   @param keyString nom de la touche appuyée.
   @param keyCode code entier de la touche appuyée. 
-  @autor Totskyi Hlib  
+  @author Totskyi Hlib  
 *)
 let canvas_keypressed(game, keyString, keyCode : t_camlbrick * string * int) : unit =
   print_string("Key pressed: ");
@@ -844,7 +844,7 @@ let canvas_keyreleased(game, keyString, keyCode : t_camlbrick * string * int) =
 (**
   Cette fonction est utilisée par l'interface graphique pour connaitre l'information
   l'information à afficher dans la zone Custom1 de la zone du menu.
-  @autor Hau NGUYEN
+  @author Hau NGUYEN
 *)
 let custom1_text() : string =
   (* Iteration 4 *)
@@ -869,7 +869,7 @@ let custom2_text() : string =
   Vous pouvez réaliser des traitements spécifiques, mais comprenez bien que cela aura
   un impact sur les performances si vous dosez mal les temps de calcul.
   @param game la partie en cours.
-  @autor Alexandre SARDIN
+  @author Alexandre SARDIN
 *)
 let start_onclick(game : t_camlbrick) : unit =
   if game.state = PAUSING then
@@ -887,7 +887,7 @@ let start_onclick(game : t_camlbrick) : unit =
   Vous pouvez réaliser des traitements spécifiques, mais comprenez bien que cela aura
   un impact sur les performances si vous dosez mal les temps de calcul.
   @param game la partie en cours.
-  @autor Alexandre SARDIN
+  @author Alexandre SARDIN
 *)
 let stop_onclick(game : t_camlbrick) : unit =
   if game.state = PLAYING then
@@ -905,7 +905,7 @@ let stop_onclick(game : t_camlbrick) : unit =
   d'interagir avec le joueur.
   @param game la partie en cours.
   @return Renvoie la valeur du slider Speed.
-  @autor Hlib TOTSKYI
+  @author Hlib TOTSKYI
 *)
 let speed_get(game : t_camlbrick) : int = 
   !(game.speed)
@@ -919,7 +919,7 @@ let speed_get(game : t_camlbrick) : int =
   Ainsi, vous pourrez réagir selon le joueur.
   @param game la partie en cours.
   @param xspeed la nouvelle valeur du slider Speed.
-  @autor Hlib TOTSKYI
+  @author Hlib TOTSKYI
 *)
 let speed_change(game,xspeed : t_camlbrick * int) : unit=
   print_endline("Change speed : "^(string_of_int xspeed));
@@ -934,7 +934,7 @@ let speed_change(game,xspeed : t_camlbrick * int) : unit=
   Vous pouvez réaliser des traitements spécifiques, mais comprenez bien que cela aura
   un impact sur les performances si vous dosez mal les temps de calcul.
   @param game la partie en cours.
-  @autor Hlib TOTSKYI    
+  @author Hlib TOTSKYI    
 *)
 let animate_action(game : t_camlbrick) : unit =
   if game.state = PLAYING then begin
